@@ -1,0 +1,36 @@
+﻿using AutoMapper;
+using BusinceLayer.EntitiesDTOS;
+using DataAccessLayer.Entities;
+using DataAccessLayer.Repositories;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+
+namespace BusinceLayer.Services
+{
+    public class UserService : BaseService<User, UserDto, CreateUserDto, UpdateUserDto>
+    {
+        private readonly IPasswordHasher<User> _passwordHasher;
+
+        public UserService(IBaseRepositories<User> repository, IMapper mapper)
+            : base(repository, mapper)
+        {
+            _passwordHasher = new PasswordHasher<User>();
+        }
+
+        public override async Task<UserDto> AddAsync(CreateUserDto createDto)
+        {
+            
+            var entity = _mapper.Map<User>(createDto);
+
+            entity.PassHash = _passwordHasher.HashPassword(entity, createDto.Password);
+
+            var newEntity = await _repository.AddAsync(entity);
+
+            return _mapper.Map<UserDto>(newEntity);
+        }
+    }
+}
