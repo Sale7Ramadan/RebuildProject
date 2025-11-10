@@ -39,7 +39,7 @@ namespace BusinceLayer.EntitiesDTOS
 
         //[Required(ErrorMessage = "كلمة المرور مطلوبة.")]
         //[StringLength(100, MinimumLength = 8, ErrorMessage = "كلمة المرور يجب أن تكون بين 8 و 100 حرف.")]
-        public string Password { get; set; } // نستقبل كلمة المرور كنص عادي
+        public string Password { get; set; } = null!;// نستقبل كلمة المرور كنص عادي
 
         public string Role { get; set; } = "User"; // القيمة الافتراضية للدور
         //[StringLength(20)]

@@ -32,17 +32,17 @@ namespace BusinceLayer.Mapping
             CreateMap<UpdateCityDto, City>();
 
             CreateMap<Comment, CommentDto>()
-             
+
           .ForMember(dest => dest.UserName, opt =>
           opt.MapFrom(src => src.User.FirstName.ToString()
-          +" "+src.User.LastName.ToString() ));
+          + " " + src.User.LastName.ToString()));
 
             CreateMap<CreateCommentDto, Comment>();
             CreateMap<UpdateCommentDto, Comment>();
 
 
 
-      
+
 
 
 
@@ -80,7 +80,9 @@ namespace BusinceLayer.Mapping
                 .ForMember(dest => dest.TotalCollectedAmount, opt => opt.MapFrom(src => src.DonationCases.Sum(dc => dc.CollectedAmount ?? 0)))
                 // نتحقق مما إذا كان هناك أي حالة تبرع مرتبطة بالبلاغ
                 .ForMember(dest => dest.HasDonationCase, opt => opt.MapFrom(src => src.DonationCases.Any()));
-            CreateMap<CreateReportDto, Report>();
+            CreateMap<CreateReportDto, Report>()
+                .ForMember(dest => dest.ReportImages,opt => opt.MapFrom(src => src.ReportImages))
+                ;
             CreateMap<UpdateReportDto, Report>();
 
             // --- ReportImage Mappings ---
@@ -91,17 +93,16 @@ namespace BusinceLayer.Mapping
 
             CreateMap<User, UserDto>()
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"))
-                // حساب عدد التقارير
                 .ForMember(dest => dest.ReportsCount, opt => opt.MapFrom(src => src.Reports.Count))
-                // حساب عدد التعليقات
                 .ForMember(dest => dest.CommentsCount, opt => opt.MapFrom(src => src.Comments.Count))
-                // حساب عدد التبرعات
                 .ForMember(dest => dest.DonationsCount, opt => opt.MapFrom(src => src.Donations.Count));
 
             CreateMap<CreateUserDto, User>()
-                .ForMember(dest => dest.PassHash, opt => opt.MapFrom(src => src.Password));
+                .ForMember(dest => dest.PassHash, opt => opt.Ignore()); 
+
+          
             CreateMap<UpdateUserDto, User>()
                 .ForMember(dest => dest.PassHash, opt => opt.Ignore());
         }
-    }
+        }
 }

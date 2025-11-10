@@ -15,7 +15,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// 🧱 استدعاء طبقة الـ DataAccess
 builder.Services.AddDataAccessLayer(builder.Configuration.GetConnectionString("DefaultConnection"));
 builder.Services.AddBusinessLayer();
 

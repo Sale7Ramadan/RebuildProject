@@ -44,6 +44,8 @@ namespace BusinceLayer.EntitiesDTOS
 
         //[Required(ErrorMessage = "يجب اختيار المدينة.")]
         public int CityId { get; set; }
+
+        public List<ReportImageDto> ReportImages { get; set; } = new List<ReportImageDto>();
     }
 
     public class UpdateReportDto

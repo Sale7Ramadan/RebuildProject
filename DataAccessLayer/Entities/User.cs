@@ -13,7 +13,7 @@ public partial class User
 
     public string Email { get; set; } = null!;
 
-    public string PassHash { get; set; } 
+    public string PassHash { get; set; } = string.Empty;
 
     public string? PhoneNumber { get; set; }
 

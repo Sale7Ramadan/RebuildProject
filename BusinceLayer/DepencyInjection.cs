@@ -1,7 +1,7 @@
 ﻿using BusinceLayer.Interfaces;
 using BusinceLayer.Services;
-using BusinceLayer.Interfaces;
-using BusinceLayer.Services;
+using DataAccessLayer.Entities;
+using BusinceLayer.EntitiesDTOS;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BusinceLayer
@@ -11,9 +11,10 @@ namespace BusinceLayer
         public static IServiceCollection AddBusinessLayer(this IServiceCollection services)
         {
             services.AddScoped(typeof(IBaseService<,,,>), typeof(BaseService<,,,>));
-            services.AddScoped<UserService>();
-            return services;
 
+            services.AddScoped<IBaseService<User, UserDto, CreateUserDto, UpdateUserDto>, UserService>();
+
+            return services;
         }
     }
 }

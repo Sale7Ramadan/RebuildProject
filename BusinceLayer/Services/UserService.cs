@@ -23,14 +23,26 @@ namespace BusinceLayer.Services
 
         public override async Task<UserDto> AddAsync(CreateUserDto createDto)
         {
-            
-            var entity = _mapper.Map<User>(createDto);
+            if (string.IsNullOrWhiteSpace(createDto.Password))
+            {
+                throw new ArgumentException("Password is required");
+            }
 
-            entity.PassHash = _passwordHasher.HashPassword(entity, createDto.Password);
+            var user = new User
+            {
+                FirstName = createDto.FirstName,
+                LastName = createDto.LastName,
+                Email = createDto.Email,
+                Role = createDto.Role,
+                PhoneNumber = createDto.PhoneNumber,
+                CreatedAt = DateTime.Now
+            };
 
-            var newEntity = await _repository.AddAsync(entity);
+            user.PassHash = _passwordHasher.HashPassword(user, createDto.Password);
 
-            return _mapper.Map<UserDto>(newEntity);
+            var savedUser = await _repository.AddAsync(user);
+
+            return _mapper.Map<UserDto>(savedUser);
         }
     }
 }
