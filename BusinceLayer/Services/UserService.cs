@@ -44,5 +44,23 @@ namespace BusinceLayer.Services
 
             return _mapper.Map<UserDto>(savedUser);
         }
+        public async Task<UserDto?> LoginAsync(LoginDto loginDto)
+        {
+           
+            var user = (await _repository.GetAllAsync())
+                        .FirstOrDefault(u => u.Email == loginDto.Email);
+
+            if (user == null)
+                return null; 
+
+          
+            var result = _passwordHasher.VerifyHashedPassword(user, user.PassHash, loginDto.Password);
+
+            if (result == PasswordVerificationResult.Failed)
+                return null; 
+
+          
+            return _mapper.Map<UserDto>(user);
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using BusinceLayer.EntitiesDTOS;
 using BusinceLayer.Interfaces;
+using BusinceLayer.Services;
 using DataAccessLayer.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,7 @@ namespace RebuildProject.Controllers
     public class UserController : ControllerBase
     {
         private readonly IBaseService<User, UserDto, CreateUserDto, UpdateUserDto> _userService;
-
+        private readonly UserService userService1;
         public UserController(IBaseService<User, UserDto, CreateUserDto, UpdateUserDto> userService)
         {
             _userService = userService;
@@ -71,5 +72,19 @@ namespace RebuildProject.Controllers
 
             return NoContent();
         }
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var userDto = await userService1.LoginAsync(loginDto);
+
+            if (userDto == null)
+                return Unauthorized("Invalid email or password");
+
+            return Ok(userDto);
+        }
+
     }
 }

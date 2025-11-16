@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BusinceLayer.EntitiesDTOS;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,5 +14,7 @@ namespace BusinceLayer.Interfaces
         Task<TDto> AddAsync(TCreateDto createDto);
         Task<bool> UpdateAsync(int id, TUpdateDto updateDto);
         Task<bool> DeleteAsync(int id);
+       
+
     }
 }

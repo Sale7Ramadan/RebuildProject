@@ -39,7 +39,7 @@ namespace DataAccessLayer.Migrations
                     b.HasKey("CategoryId")
                         .HasName("PK__Categori__19093A2BD072F12E");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Entities.City", b =>
@@ -59,7 +59,7 @@ namespace DataAccessLayer.Migrations
                     b.HasKey("CityId")
                         .HasName("PK__Cities__F2D21A96B4BF4909");
 
-                    b.ToTable("Cities", (string)null);
+                    b.ToTable("Cities");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Entities.Comment", b =>
@@ -95,7 +95,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments", (string)null);
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Entities.Donation", b =>
@@ -134,7 +134,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Donations", (string)null);
+                    b.ToTable("Donations");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Entities.DonationCase", b =>
@@ -177,7 +177,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("ReportId");
 
-                    b.ToTable("DonationCases", (string)null);
+                    b.ToTable("DonationCases");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Entities.Report", b =>
@@ -232,7 +232,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Reports", (string)null);
+                    b.ToTable("Reports");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Entities.ReportImage", b =>
@@ -258,7 +258,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("ReportId");
 
-                    b.ToTable("ReportImages", (string)null);
+                    b.ToTable("ReportImages");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Entities.User", b =>
@@ -309,7 +309,7 @@ namespace DataAccessLayer.Migrations
                     b.HasIndex(new[] { "Email" }, "UQ__Users__A9D105343DB64C2D")
                         .IsUnique();
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Entities.VwClosedDonationCase", b =>
