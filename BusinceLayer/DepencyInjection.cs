@@ -13,7 +13,7 @@ namespace BusinceLayer
             services.AddScoped(typeof(IBaseService<,,,>), typeof(BaseService<,,,>));
 
             services.AddScoped<IBaseService<User, UserDto, CreateUserDto, UpdateUserDto>, UserService>();
-
+            services.AddScoped<IUserService, UserService>();
             return services;
         }
     }

@@ -8,10 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using BusinceLayer.Interfaces;
 
 namespace BusinceLayer.Services
 {
-    public class UserService : BaseService<User, UserDto, CreateUserDto, UpdateUserDto>
+    public class UserService : BaseService<User, UserDto, CreateUserDto, UpdateUserDto>,IUserService
     {
         private readonly IPasswordHasher<User> _passwordHasher;
 

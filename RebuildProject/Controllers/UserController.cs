@@ -11,13 +11,16 @@ namespace RebuildProject.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IBaseService<User, UserDto, CreateUserDto, UpdateUserDto> _userService;
-        private readonly UserService userService1;
-        public UserController(IBaseService<User, UserDto, CreateUserDto, UpdateUserDto> userService)
+        private readonly IUserService _userService;
+        //private readonly UserService userService1;
+        //public UserController(IBaseService<User, UserDto, CreateUserDto, UpdateUserDto> userService)
+        //{
+        //    _userService = userService;
+        //}
+        public UserController(IUserService userService)
         {
             _userService = userService;
         }
-
         // GET: api/User
         [HttpGet]
         public async Task<IActionResult> GetAll()
@@ -78,7 +81,7 @@ namespace RebuildProject.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var userDto = await userService1.LoginAsync(loginDto);
+            var userDto = await _userService.LoginAsync(loginDto);
 
             if (userDto == null)
                 return Unauthorized("Invalid email or password");
