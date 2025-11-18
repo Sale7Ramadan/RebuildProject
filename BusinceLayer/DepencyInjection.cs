@@ -14,6 +14,9 @@ namespace BusinceLayer
 
             services.AddScoped<IBaseService<User, UserDto, CreateUserDto, UpdateUserDto>, UserService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IReportService, ReportService>();
+            services.AddScoped<IJwtService, JwtService>();
+
             return services;
         }
     }

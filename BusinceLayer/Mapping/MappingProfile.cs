@@ -78,9 +78,11 @@ namespace BusinceLayer.Mapping
     .ForMember(dest => dest.TotalCollectedAmount, opt => opt.MapFrom(src => src.DonationCases.Sum(dc => dc.CollectedAmount ?? 0)))
     .ForMember(dest => dest.HasDonationCase, opt => opt.MapFrom(src => src.DonationCases.Any()));
 
-            CreateMap<CreateReportDto, Report>()
-                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserID));
-            ;
+            CreateMap<CreateReportDto, Report>();
+           
+     
+
+
             CreateMap<UpdateReportDto, Report>();
 
             // --- ReportImage Mappings ---
@@ -102,6 +104,11 @@ namespace BusinceLayer.Mapping
           
             CreateMap<UpdateUserDto, User>()
                 .ForMember(dest => dest.PassHash, opt => opt.Ignore());
+
+
+            
+
+
         }
         }
 }

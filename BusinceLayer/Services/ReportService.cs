@@ -15,18 +15,16 @@ namespace BusinceLayer.Services
     {
         public ReportService(IBaseRepositories<Report> repo, IMapper mapper) : base(repo, mapper) { }
 
-        public override async Task<ReportDto> AddAsync(CreateReportDto dto)
+        public async Task<ReportDto> AddReportWithUserAsync(Report report, List<string> imagesBase64)
         {
-            var report = _mapper.Map<Report>(dto);
-            await _repository.AddAsync(report);
-
-            report.ReportImages = dto.ImagesBase64.Select(b64 => new ReportImage
+            // ربط الصور بالبلاغ قبل الحفظ
+            report.ReportImages = imagesBase64.Select(b64 => new ReportImage
             {
-                ImageUrl = SaveBase64ToFile(b64),
-                ReportId = report.ReportId
+                ImageUrl = SaveBase64ToFile(b64)
             }).ToList();
 
-            await _repository.UpdateAsync(report); // حفظ الصور بعد إضافة البلاغ
+            // حفظ البلاغ + الصور دفعة واحدة
+            await _repository.AddAsync(report);
 
             return _mapper.Map<ReportDto>(report);
         }
@@ -45,5 +43,14 @@ namespace BusinceLayer.Services
             return $"/images/{fileName}";
         }
     }
+
+
+
+
+
+
+
+
+
 
 }

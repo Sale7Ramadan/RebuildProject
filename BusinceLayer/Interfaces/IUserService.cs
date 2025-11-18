@@ -10,6 +10,6 @@ namespace BusinceLayer.Interfaces
 {
     public interface IUserService : IBaseService<User, UserDto, CreateUserDto, UpdateUserDto>
     {
-        Task<UserDto?> LoginAsync(LoginDto loginDto);
+        Task<LoginResponseDto?> LoginAsync(LoginDto loginDto);
     }
 }

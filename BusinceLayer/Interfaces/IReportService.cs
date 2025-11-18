@@ -10,8 +10,6 @@ namespace BusinceLayer.Interfaces
 {
     public interface IReportService : IBaseService<Report, ReportDto, CreateReportDto, UpdateReportDto>
     {
-        // دوال إضافية لو بدك
-        // مثلاً البحث عن بلاغ مع الصور
-        //Task<ReportDto> AddReportWithImagesAsync(CreateReportDto dto);
+        Task<ReportDto> AddReportWithUserAsync(Report report,List<string> imagesBase64);
     }
 }

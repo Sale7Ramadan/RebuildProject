@@ -15,11 +15,12 @@ namespace BusinceLayer.Services
     public class UserService : BaseService<User, UserDto, CreateUserDto, UpdateUserDto>,IUserService
     {
         private readonly IPasswordHasher<User> _passwordHasher;
-
-        public UserService(IBaseRepositories<User> repository, IMapper mapper)
+        private readonly IJwtService _jwtService;
+        public UserService(IBaseRepositories<User> repository, IMapper mapper, IJwtService jwtService)
             : base(repository, mapper)
         {
             _passwordHasher = new PasswordHasher<User>();
+            _jwtService = jwtService;
         }
 
         public override async Task<UserDto> AddAsync(CreateUserDto createDto)
@@ -45,23 +46,51 @@ namespace BusinceLayer.Services
 
             return _mapper.Map<UserDto>(savedUser);
         }
-        public async Task<UserDto?> LoginAsync(LoginDto loginDto)
-        {
+        //public async Task<UserDto?> LoginAsync(LoginDto loginDto)
+        //{
            
-            var user = (await _repository.GetAllAsync())
-                        .FirstOrDefault(u => u.Email == loginDto.Email);
+        //    var user = (await _repository.GetAllAsync())
+        //                .FirstOrDefault(u => u.Email == loginDto.Email);
 
-            if (user == null)
-                return null; 
-
-          
-            var result = _passwordHasher.VerifyHashedPassword(user, user.PassHash, loginDto.Password);
-
-            if (result == PasswordVerificationResult.Failed)
-                return null; 
+        //    if (user == null)
+        //        return null; 
 
           
-            return _mapper.Map<UserDto>(user);
-        }
+        //    var result = _passwordHasher.VerifyHashedPassword(user, user.PassHash, loginDto.Password);
+
+        //    if (result == PasswordVerificationResult.Failed)
+        //        return null; 
+
+          
+        //    return _mapper.Map<UserDto>(user);
+        //}
+
+
+        public async Task<LoginResponseDto?> LoginAsync(LoginDto loginDto)
+{
+    var user = (await _repository.GetAllAsync())
+                .FirstOrDefault(u => u.Email == loginDto.Email);
+
+    if (user == null)
+        return null;
+
+    var result = _passwordHasher.VerifyHashedPassword(user, user.PassHash, loginDto.Password);
+
+    if (result == PasswordVerificationResult.Failed)
+        return null;
+
+    // توليد JWT
+    var token = _jwtService.GenerateToken(user);
+
+    // إنشاء الـResponse DTO
+    var response = new LoginResponseDto
+    {
+        User = _mapper.Map<UserDto>(user),
+        Token = token
+    };
+
+    return response;
+}
+
     }
 }

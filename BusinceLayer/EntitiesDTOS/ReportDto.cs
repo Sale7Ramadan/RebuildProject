@@ -34,7 +34,7 @@ namespace BusinceLayer.EntitiesDTOS
         public decimal? EstimatedCost { get; set; }
         public int CategoryId { get; set; }
         public int CityId { get; set; }
-        public int UserID { get; set; }
+       
 
         // هنا نغير من ReportImageDto إلى Base64 strings
         public List<string> ImagesBase64 { get; set; } = new List<string>();

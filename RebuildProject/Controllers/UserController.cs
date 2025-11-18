@@ -81,12 +81,12 @@ namespace RebuildProject.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var userDto = await _userService.LoginAsync(loginDto);
+            var loginResponse = await _userService.LoginAsync(loginDto);
 
-            if (userDto == null)
+            if (loginResponse == null)
                 return Unauthorized("Invalid email or password");
 
-            return Ok(userDto);
+            return Ok(loginResponse);
         }
 
     }
