@@ -29,23 +29,15 @@ namespace BusinceLayer.EntitiesDTOS
     }
     public class CreateReportDto
     {
-        //[Required(ErrorMessage = "عنوان البلاغ مطلوب.")]
-        //[StringLength(200, ErrorMessage = "العنوان طويل جداً، الحد الأقصى 200 حرف.")]
         public string Title { get; set; }
-
-        //[StringLength(2000, ErrorMessage = "الوصف طويل جداً، الحد الأقصى 2000 حرف.")]
         public string? Description { get; set; }
-
-        //[Range(0.0, 1000000.00, ErrorMessage = "التكلفة التقديرية يجب أن تكون قيمة موجبة.")]
         public decimal? EstimatedCost { get; set; }
-
-        //[Required(ErrorMessage = "يجب اختيار التصنيف.")]
         public int CategoryId { get; set; }
-
-        //[Required(ErrorMessage = "يجب اختيار المدينة.")]
         public int CityId { get; set; }
-        public int UserID { get; set; } = 6;
-        public List<ReportImageDto> ReportImages { get; set; } = new List<ReportImageDto>();
+        public int UserID { get; set; }
+
+        // هنا نغير من ReportImageDto إلى Base64 strings
+        public List<string> ImagesBase64 { get; set; } = new List<string>();
     }
 
     public class UpdateReportDto

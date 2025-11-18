@@ -70,20 +70,17 @@ namespace BusinceLayer.Mapping
 
 
             CreateMap<Report, ReportDto>()
-                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.FirstName + " " + src.User.LastName))
-                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.CategoryName))
-                .ForMember(dest => dest.CityName, opt => opt.MapFrom(src => src.City.CityName))
-                .ForMember(dest => dest.CommentCount, opt => opt.MapFrom(src => src.Comments.Count))
-                // نحول مجموعة الصور إلى مجموعة من DTOs الخاصة بها
-                .ForMember(dest => dest.ReportImages, opt => opt.MapFrom(src => src.ReportImages))
-                // نحسب المبلغ الإجمالي المجمّع من كل حالات التبرع المرتبطة
-                .ForMember(dest => dest.TotalCollectedAmount, opt => opt.MapFrom(src => src.DonationCases.Sum(dc => dc.CollectedAmount ?? 0)))
-                // نتحقق مما إذا كان هناك أي حالة تبرع مرتبطة بالبلاغ
-                .ForMember(dest => dest.HasDonationCase, opt => opt.MapFrom(src => src.DonationCases.Any()));
+    .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.FirstName + " " + src.User.LastName))
+    .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.CategoryName))
+    .ForMember(dest => dest.CityName, opt => opt.MapFrom(src => src.City.CityName))
+    .ForMember(dest => dest.CommentCount, opt => opt.MapFrom(src => src.Comments.Count))
+    .ForMember(dest => dest.ReportImages, opt => opt.MapFrom(src => src.ReportImages))
+    .ForMember(dest => dest.TotalCollectedAmount, opt => opt.MapFrom(src => src.DonationCases.Sum(dc => dc.CollectedAmount ?? 0)))
+    .ForMember(dest => dest.HasDonationCase, opt => opt.MapFrom(src => src.DonationCases.Any()));
+
             CreateMap<CreateReportDto, Report>()
-                .ForMember(dest => dest.ReportImages,opt => opt.MapFrom(src => src.ReportImages))
-                .ForMember(dest => dest.UserId,opt => opt.MapFrom(src => src.UserID))
-                ;
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserID));
+            ;
             CreateMap<UpdateReportDto, Report>();
 
             // --- ReportImage Mappings ---
