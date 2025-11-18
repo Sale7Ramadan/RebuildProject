@@ -82,13 +82,15 @@ namespace BusinceLayer.Mapping
                 .ForMember(dest => dest.HasDonationCase, opt => opt.MapFrom(src => src.DonationCases.Any()));
             CreateMap<CreateReportDto, Report>()
                 .ForMember(dest => dest.ReportImages,opt => opt.MapFrom(src => src.ReportImages))
+                .ForMember(dest => dest.UserId,opt => opt.MapFrom(src => src.UserID))
                 ;
             CreateMap<UpdateReportDto, Report>();
 
             // --- ReportImage Mappings ---
             CreateMap<ReportImage, ReportImageDto>();
-            CreateMap<CreateReportImageDto, CreateReportImageDto>();
+            CreateMap<CreateReportImageDto, ReportImage>();
 
+            CreateMap<ReportImageDto, ReportImage>();
 
 
             CreateMap<User, UserDto>()

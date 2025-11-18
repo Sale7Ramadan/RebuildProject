@@ -44,7 +44,7 @@ namespace BusinceLayer.EntitiesDTOS
 
         //[Required(ErrorMessage = "يجب اختيار المدينة.")]
         public int CityId { get; set; }
-
+        public int UserID { get; set; } = 6;
         public List<ReportImageDto> ReportImages { get; set; } = new List<ReportImageDto>();
     }
 
