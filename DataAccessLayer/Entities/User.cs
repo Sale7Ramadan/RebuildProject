@@ -20,7 +20,10 @@ public partial class User
     public string Role { get; set; } = null!;
 
     public DateTime? CreatedAt { get; set; }
+    public int? CityId { get; set; }
 
+
+    public City? City { get; set; }
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
     public virtual ICollection<Donation> Donations { get; set; } = new List<Donation>();

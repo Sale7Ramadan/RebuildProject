@@ -28,8 +28,13 @@ namespace RebuildProject.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var reports = await _reportService.GetAllAsync();
-            return Ok(reports);
+
+            var result = await _reportService.GetAllWithIncludeAsync(
+        x => x.City,
+        x => x.User,
+        x => x.Category
+    );
+            return Ok(result);
         }
 
         // GET: api/Report/5

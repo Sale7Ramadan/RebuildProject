@@ -25,7 +25,7 @@ namespace RebuildProject.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var users = await _userService.GetAllAsync();
+            var users = await _userService.GetAllWithIncludeAsync(u =>u.City);
             return Ok(users);
         }
 
@@ -33,9 +33,11 @@ namespace RebuildProject.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var user = await _userService.GetByIdAsync(id);
+            var users = await _userService.GetAllWithIncludeAsync(u => u.City);
+            var user = users.FirstOrDefault(u => u.UserId == id);
+
             if (user == null)
-                return NotFound($"User with ID {id} not found.");
+                return NotFound();
 
             return Ok(user);
         }

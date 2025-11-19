@@ -96,14 +96,17 @@ namespace BusinceLayer.Mapping
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"))
                 .ForMember(dest => dest.ReportsCount, opt => opt.MapFrom(src => src.Reports.Count))
                 .ForMember(dest => dest.CommentsCount, opt => opt.MapFrom(src => src.Comments.Count))
-                .ForMember(dest => dest.DonationsCount, opt => opt.MapFrom(src => src.Donations.Count));
+                .ForMember(dest => dest.DonationsCount, opt => opt.MapFrom(src => src.Donations.Count))
+                .ForMember(dest => dest.CityName,
+                       opt => opt.MapFrom(src => src.City != null ? src.City.CityName : null)); 
 
             CreateMap<CreateUserDto, User>()
                 .ForMember(dest => dest.PassHash, opt => opt.Ignore()); 
 
           
             CreateMap<UpdateUserDto, User>()
-                .ForMember(dest => dest.PassHash, opt => opt.Ignore());
+                .ForMember(dest => dest.PassHash, opt => opt.Ignore())
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null)); ;
 
 
             

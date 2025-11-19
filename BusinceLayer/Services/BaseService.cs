@@ -5,6 +5,7 @@ using DataAccessLayer.Repositries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -58,5 +59,12 @@ namespace BusinceLayer.Services
               await _repository.UpdateAsync(existingEntity);
             return true;
         }
+        public virtual async Task<IEnumerable<TDto>> GetAllWithIncludeAsync(
+    params Expression<Func<TEntity, object>>[] includes)
+        {
+            var entities = await _repository.GetAllWithIncludeAsync(includes);
+            return _mapper.Map<IEnumerable<TDto>>(entities);
+        }
+
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DataAccessLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace DataAccessLayer.Context;
 
 public partial class AppDbContext : DbContext
@@ -41,7 +42,11 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<VwOpenDonationCase> VwOpenDonationCases { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Name=DefaultConnection");
+    {
+          optionsBuilder.UseSqlServer("Name=DefaultConnection");
+        //optionsBuilder.UseLazyLoadingProxies();
+    }
+       
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -260,6 +265,10 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.ReporterName).HasMaxLength(201);
             entity.Property(e => e.Status).HasMaxLength(50);
         });
+        modelBuilder.Entity<User>()
+    .HasOne(u => u.City)
+    .WithMany(c => c.Users)
+    .HasForeignKey(u => u.CityId);
 
         OnModelCreatingPartial(modelBuilder);
     }

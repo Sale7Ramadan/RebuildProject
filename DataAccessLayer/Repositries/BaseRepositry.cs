@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,6 +23,7 @@ namespace DataAccessLayer.Repositries
 
         public async Task<IEnumerable<T>> GetAllAsync()
         {
+            //var data = await _context.
             return await _dbSet.ToListAsync();
         }
 
@@ -56,5 +58,18 @@ namespace DataAccessLayer.Repositries
 
             return true;
         }
+
+        public async Task<IEnumerable<T>> GetAllWithIncludeAsync(
+    params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = _dbSet;
+
+            foreach (var include in includes)
+                query = query.Include(include);
+
+            return await query.ToListAsync();
+        }
+
+
     }
 }

@@ -1,18 +1,19 @@
 ﻿using AutoMapper;
 using BusinceLayer.EntitiesDTOS;
+using BusinceLayer.Interfaces;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Repositories;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using BusinceLayer.Interfaces;
 
 namespace BusinceLayer.Services
 {
-    public class UserService : BaseService<User, UserDto, CreateUserDto, UpdateUserDto>,IUserService
+    public class UserService : BaseService<User, UserDto, CreateUserDto, UpdateUserDto>, IUserService
     {
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly IJwtService _jwtService;
@@ -91,6 +92,8 @@ namespace BusinceLayer.Services
 
     return response;
 }
+        
+
 
     }
 }

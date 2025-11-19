@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,5 +18,9 @@ namespace DataAccessLayer.Repositories
         Task UpdateAsync(T entity);
 
         Task<bool> DeleteAsync(int id);
+
+        Task<IEnumerable<T>> GetAllWithIncludeAsync(params Expression<Func<T, object>>[] includes);
+
+
     }
 }
