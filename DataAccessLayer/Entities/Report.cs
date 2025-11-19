@@ -20,9 +20,10 @@ public partial class Report
     public decimal? EstimatedCost { get; set; }
 
     public string? Status { get; set; }
-
+    public double? Latitude { get; set; }   
+    public double? Longitude { get; set; } 
     public DateTime? CreatedAt { get; set; }
-
+    public int LikesCount { get; set; }
     public virtual Category Category { get; set; } = null!;
 
     public virtual City City { get; set; } = null!;

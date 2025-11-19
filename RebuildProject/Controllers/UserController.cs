@@ -12,11 +12,7 @@ namespace RebuildProject.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        //private readonly UserService userService1;
-        //public UserController(IBaseService<User, UserDto, CreateUserDto, UpdateUserDto> userService)
-        //{
-        //    _userService = userService;
-        //}
+       
         public UserController(IUserService userService)
         {
             _userService = userService;

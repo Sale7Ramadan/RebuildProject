@@ -105,5 +105,27 @@ namespace RebuildProject.Controllers
 
             return NoContent();
         }
+        [HttpPost("{id}/like")]
+        public async Task<IActionResult> LikeReport(int id)
+        {
+            var result = await reportService1.IncrementLikesAsync(id);
+            if (!result)
+                return NotFound();
+            return Ok(new { message = "Liked successfully" });
+        }
+
+        [HttpGet("popular")]
+        public async Task<IActionResult> GetPopularReports([FromQuery] int count = 10)
+        {
+            var reports = await reportService1.GetMostLikedReportsAsync(count);
+            return Ok(reports);
+        }
+
+        [HttpGet("by-city/{cityId}")]
+        public async Task<IActionResult> GetByCity(int cityId)
+        {
+            var reports = await reportService1.GetReportsByCityAsync(cityId);
+            return Ok(reports);
+        }
     }
 }

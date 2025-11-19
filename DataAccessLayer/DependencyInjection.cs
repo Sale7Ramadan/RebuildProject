@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.Context;
+using DataAccessLayer.Interfaces;
 using DataAccessLayer.Repositories;
 using DataAccessLayer.Repositries;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +15,7 @@ namespace DataAccessLayer
                 options.UseSqlServer(connectionString));
 
             services.AddScoped(typeof(IBaseRepositories<>), typeof(BaseRepository<>));
-
+            services.AddScoped<IReportRepository, ReportRepository>();
             return services;
         }
     }

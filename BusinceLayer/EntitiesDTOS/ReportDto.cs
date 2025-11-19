@@ -15,7 +15,9 @@ namespace BusinceLayer.EntitiesDTOS
         public decimal? EstimatedCost { get; set; }
         public string Status { get; set; }
         public DateTime? CreatedAt { get; set; }
-
+        public decimal? Latitude { get; set; }
+        public decimal? Longitude { get; set; }
+        public int LikesCount { get; set; }
         public string UserName { get; set; }        
         public string CategoryName { get; set; }    
         public string CityName { get; set; }        
@@ -34,7 +36,8 @@ namespace BusinceLayer.EntitiesDTOS
         public decimal? EstimatedCost { get; set; }
         public int CategoryId { get; set; }
         public int CityId { get; set; }
-       
+        public decimal? Latitude { get; set; }
+        public decimal? Longitude { get; set; }
 
         // هنا نغير من ReportImageDto إلى Base64 strings
         public List<string> ImagesBase64 { get; set; } = new List<string>();

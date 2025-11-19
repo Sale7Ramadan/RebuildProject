@@ -22,14 +22,16 @@ namespace BusinceLayer.Mapping
 
             CreateMap<Category, CategoryDto>();
             CreateMap<CreateCategoryDto, Category>();
-            CreateMap<UpdateCategoryDto, Category>();
+            CreateMap<UpdateCategoryDto, Category>()
+            .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
 
 
 
             CreateMap<City, CityDto>();
             CreateMap<CreateCityDto, City>();
-            CreateMap<UpdateCityDto, City>();
+            CreateMap<UpdateCityDto, City>()
+            .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             CreateMap<Comment, CommentDto>()
 
@@ -38,7 +40,8 @@ namespace BusinceLayer.Mapping
           + " " + src.User.LastName.ToString()));
 
             CreateMap<CreateCommentDto, Comment>();
-            CreateMap<UpdateCommentDto, Comment>();
+            CreateMap<UpdateCommentDto, Comment>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
 
 
@@ -62,7 +65,8 @@ namespace BusinceLayer.Mapping
                 .ForMember(dest => dest.ReportDescription, opt => opt.MapFrom(src => src.Report.Description));
 
             CreateMap<CreateDonationCaseDto, DonationCase>();
-            CreateMap<UpdateDonationCaseDto, DonationCase>();
+            CreateMap<UpdateDonationCaseDto, DonationCase>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
 
 
@@ -78,12 +82,22 @@ namespace BusinceLayer.Mapping
     .ForMember(dest => dest.TotalCollectedAmount, opt => opt.MapFrom(src => src.DonationCases.Sum(dc => dc.CollectedAmount ?? 0)))
     .ForMember(dest => dest.HasDonationCase, opt => opt.MapFrom(src => src.DonationCases.Any()));
 
-            CreateMap<CreateReportDto, Report>();
-           
-     
+            CreateMap<CreateReportDto, Report>()
+      .ForMember(dest => dest.LikesCount, opt => opt.Ignore()) 
+      .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now)) 
+      .ForMember(dest => dest.ReportImages, opt => opt.Ignore())  
+      .ForMember(dest => dest.Comments, opt => opt.Ignore())  
+      .ForMember(dest => dest.DonationCases, opt => opt.Ignore())
+      ;
 
 
-            CreateMap<UpdateReportDto, Report>();
+
+
+            CreateMap<UpdateReportDto, Report>()
+    .ForMember(dest => dest.LikesCount, opt => opt.Ignore()) 
+    .ForMember(dest => dest.CreatedAt, opt => opt.Ignore()) 
+    .ForMember(dest => dest.ReportImages, opt => opt.Ignore())  
+    .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null)); 
 
             // --- ReportImage Mappings ---
             CreateMap<ReportImage, ReportImageDto>();
