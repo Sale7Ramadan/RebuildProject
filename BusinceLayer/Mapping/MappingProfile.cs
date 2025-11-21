@@ -122,8 +122,20 @@ namespace BusinceLayer.Mapping
                 .ForMember(dest => dest.PassHash, opt => opt.Ignore())
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null)); ;
 
+            //SupportTicket and SupportMessage Mappings
+            CreateMap<SupportTicket, SupportTicketDto>().ReverseMap();
 
-            
+            CreateMap<CreateSupportTicketDto, SupportTicket>()
+                .ForMember(dest => dest.UserId, opt => opt.Ignore());
+
+            CreateMap<UpdateSupportTicketDto, SupportTicket>();
+
+            CreateMap<SupportMessage, SupportMessageDto>().ReverseMap();
+
+            CreateMap<CreateSupportMessageDto, SupportMessage>()
+                .ForMember(dest => dest.UserId, opt => opt.Ignore());
+
+            CreateMap<UpdateSupportMessageDto, SupportMessage>();
 
 
         }

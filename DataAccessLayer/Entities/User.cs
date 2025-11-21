@@ -27,6 +27,8 @@ public partial class User
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
     public virtual ICollection<Donation> Donations { get; set; } = new List<Donation>();
-
+    public ICollection<SupportMessage> SupportMessages { get; set; } = new List<SupportMessage>();
     public virtual ICollection<Report> Reports { get; set; } = new List<Report>();
+    public ICollection<SupportTicket> SupportTickets { get; set; } = new List<SupportTicket>();
+
 }

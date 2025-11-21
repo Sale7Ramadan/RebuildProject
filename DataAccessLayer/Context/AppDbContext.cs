@@ -282,11 +282,28 @@ public partial class AppDbContext : DbContext
     .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<SupportMessage>()
-            .HasOne(m => m.Sender)
-            .WithMany()
-            .HasForeignKey(m => m.SenderId)
+            .HasOne(m => m.User) 
+            .WithMany(u => u.SupportMessages) 
+            .HasForeignKey(m => m.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<SupportTicket>()
+      .HasOne(t => t.User)
+      .WithMany(u => u.SupportTickets) 
+      .HasForeignKey(t => t.UserId)
+      .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<SupportTicket>()
+            .HasOne(t => t.City)
+            .WithMany(c => c.SupportTickets)
+            .HasForeignKey(t => t.CityId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        modelBuilder.Entity<SupportTicket>()
+            .HasMany(t => t.Messages)
+            .WithOne(m => m.Ticket)
+            .HasForeignKey(m => m.TicketId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         OnModelCreatingPartial(modelBuilder);
     }

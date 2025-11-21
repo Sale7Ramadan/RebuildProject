@@ -48,16 +48,7 @@ namespace RebuildProject.Controllers
             return Ok(report);
         }
 
-        // POST: api/Report
-        //[HttpPost]
-        //public async Task<IActionResult> Create([FromBody] CreateReportDto createReportDto)
-        //{
-        //    if (!ModelState.IsValid)
-        //        return BadRequest(ModelState);
-            
-        //    var createdReport = await _reportService.AddAsync(createReportDto);
-        //    return CreatedAtAction(nameof(GetById), new { id = createdReport.ReportId }, createdReport);
-        //}
+        
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateReportDto createReportDto)

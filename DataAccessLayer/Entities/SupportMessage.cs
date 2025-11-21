@@ -13,12 +13,14 @@ namespace DataAccessLayer.Entities
         public int TicketId { get; set; }
         public SupportTicket Ticket { get; set; }
 
-        public int SenderId { get; set; }
-        public User Sender { get; set; }
+
+        
 
         public string Message { get; set; }
         public bool IsFromAdmin { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public int UserId { get; set; }
+        public User User { get; set; }
     }
 }
