@@ -29,11 +29,29 @@ namespace RebuildProject.Controllers
         public async Task<IActionResult> GetAll()
         {
 
-            var result = await _reportService.GetAllWithIncludeAsync(
-        x => x.City,
-        x => x.User,
-        x => x.Category
-    );
+            var userId = int.Parse(User.FindFirst("UserId")?.Value);
+            var role = User.FindFirst("Role")?.Value;
+
+            
+            var allReports = await _reportService.GetAllWithIncludeAsync(
+                x => x.City,
+                x => x.User,
+                x => x.Category
+            );
+
+            IEnumerable<ReportDto> result;
+
+            if (role == "Admin")
+            {
+               
+                result = allReports;
+            }
+            else
+            {
+               
+                result = allReports.Where(r => r.UserId == userId);
+            }
+
             return Ok(result);
         }
 

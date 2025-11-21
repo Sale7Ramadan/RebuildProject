@@ -74,6 +74,7 @@ namespace BusinceLayer.Mapping
 
 
             CreateMap<Report, ReportDto>()
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
     .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.FirstName + " " + src.User.LastName))
     .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.CategoryName))
     .ForMember(dest => dest.CityName, opt => opt.MapFrom(src => src.City.CityName))
