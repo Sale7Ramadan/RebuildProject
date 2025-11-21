@@ -25,35 +25,43 @@ namespace RebuildProject.Controllers
         }
 
         // GET: api/Report
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllReports()
         {
-
-            var userId = int.Parse(User.FindFirst("UserId")?.Value);
-            var role = User.FindFirst("Role")?.Value;
-
-            
             var allReports = await _reportService.GetAllWithIncludeAsync(
                 x => x.City,
                 x => x.User,
                 x => x.Category
             );
 
-            IEnumerable<ReportDto> result;
-
-            if (role == "Admin")
-            {
-               
-                result = allReports;
-            }
-            else
-            {
-               
-                result = allReports.Where(r => r.UserId == userId);
-            }
-
-            return Ok(result);
+            return Ok(allReports);
         }
+
+        [HttpGet("my-reports")]
+        public async Task<IActionResult> GetMyReports()
+        {
+            // قراءة UserId من ClaimTypes.NameIdentifier
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (!int.TryParse(userIdClaim, out int userId))
+            {
+                return Unauthorized("UserId claim is missing or invalid");
+            }
+
+            var allReports = await _reportService.GetAllWithIncludeAsync(
+                x => x.City,
+                x => x.User,
+                x => x.Category
+            );
+
+            var myReports = allReports.Where(r => r.UserId == userId);
+
+            return Ok(myReports);
+        }
+
+
+
+
 
         // GET: api/Report/5
         [HttpGet("{id}")]
