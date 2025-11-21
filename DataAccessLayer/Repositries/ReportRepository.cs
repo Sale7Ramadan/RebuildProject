@@ -18,7 +18,6 @@ namespace DataAccessLayer.Repositries
         {
         }
 
-        // ✅ تنفيذ الـ method
         public async Task<bool> IncrementLikesAsync(int reportId)
         {
             var rowsAffected = await _context.Database.ExecuteSqlRawAsync(

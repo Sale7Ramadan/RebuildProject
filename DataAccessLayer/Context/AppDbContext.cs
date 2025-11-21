@@ -41,6 +41,10 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<VwOpenDonationCase> VwOpenDonationCases { get; set; }
 
+    public virtual DbSet<SupportMessage> SupportMessages { get; set; }
+
+    public virtual DbSet<SupportTicket> SupportTicket { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
           optionsBuilder.UseSqlServer("Name=DefaultConnection");
@@ -178,7 +182,7 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.Report).WithMany(p => p.ReportImages)
                 .HasForeignKey(d => d.ReportId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_ReportImages_Reports");
         });
 
@@ -269,6 +273,20 @@ public partial class AppDbContext : DbContext
     .HasOne(u => u.City)
     .WithMany(c => c.Users)
     .HasForeignKey(u => u.CityId);
+
+
+        modelBuilder.Entity<SupportMessage>()
+    .HasOne(m => m.Ticket)
+    .WithMany(t => t.Messages)
+    .HasForeignKey(m => m.TicketId)
+    .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<SupportMessage>()
+            .HasOne(m => m.Sender)
+            .WithMany()
+            .HasForeignKey(m => m.SenderId)
+            .OnDelete(DeleteBehavior.Restrict);
+
 
         OnModelCreatingPartial(modelBuilder);
     }
