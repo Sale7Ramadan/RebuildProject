@@ -116,7 +116,8 @@ namespace BusinceLayer.Mapping
                        opt => opt.MapFrom(src => src.City != null ? src.City.CityName : null)); 
 
             CreateMap<CreateUserDto, User>()
-                .ForMember(dest => dest.PassHash, opt => opt.Ignore()); 
+                .ForMember(dest => dest.PassHash, opt => opt.Ignore())
+                .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.CityName)); 
 
           
             CreateMap<UpdateUserDto, User>()
