@@ -38,7 +38,9 @@ namespace BusinceLayer.Services
                 Email = createDto.Email,
                 Role = createDto.Role,
                 PhoneNumber = createDto.PhoneNumber,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.Now,
+                 CityId = createDto.CityId,
+                //CityName = createDto.CityName
             };
 
             user.PassHash = _passwordHasher.HashPassword(user, createDto.Password);
@@ -47,25 +49,7 @@ namespace BusinceLayer.Services
 
             return _mapper.Map<UserDto>(savedUser);
         }
-        //public async Task<UserDto?> LoginAsync(LoginDto loginDto)
-        //{
-           
-        //    var user = (await _repository.GetAllAsync())
-        //                .FirstOrDefault(u => u.Email == loginDto.Email);
-
-        //    if (user == null)
-        //        return null; 
-
-          
-        //    var result = _passwordHasher.VerifyHashedPassword(user, user.PassHash, loginDto.Password);
-
-        //    if (result == PasswordVerificationResult.Failed)
-        //        return null; 
-
-          
-        //    return _mapper.Map<UserDto>(user);
-        //}
-
+      
 
         public async Task<LoginResponseDto?> LoginAsync(LoginDto loginDto)
 {
@@ -92,7 +76,61 @@ namespace BusinceLayer.Services
 
     return response;
 }
-        
+
+        public async Task<bool> UpdateUserRoleAsync(int editorId, UpdateRoleDto dto)
+        {
+            // 1.get editor user
+            var editorUser = await _repository.GetByIdAsync(editorId);
+            if (editorUser == null)
+                return false;
+
+            // 2. check  SuperAdmin
+            if (editorUser.Role != "SuperAdmin")
+                return false;
+
+            // 3. get target user
+            var targetUser = await _repository.GetByIdAsync(dto.TargetUserId);
+            if (targetUser == null)
+                return false;
+
+            // update role
+            targetUser.Role = dto.NewRole;
+
+            // save changes
+            await _repository.UpdateAsync(targetUser);
+
+            return true;
+        }
+        public async Task<bool> BanUserAsync(int editorId, BanUserDto dto)
+        {
+          
+            var editorUser = await _repository.GetByIdAsync(editorId);
+            if (editorUser == null)
+                return false;
+
+         
+            if (editorUser.Role != "Admin" && editorUser.Role != "SuperAdmin")
+                return false;
+
+  
+            var targetUser = await _repository.GetByIdAsync(dto.TargetUserId);
+            if (targetUser == null)
+                return false;
+
+
+            if (editorUser.Role == "Admin" && targetUser.Role == "SuperAdmin")
+                return false;
+
+
+            targetUser.IsBanned = true; 
+            targetUser.BanReason = dto.Reason;
+
+            await _repository.UpdateAsync(targetUser);
+
+            return true;
+        }
+
+
 
 
     }

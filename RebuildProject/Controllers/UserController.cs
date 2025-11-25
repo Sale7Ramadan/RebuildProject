@@ -2,8 +2,10 @@
 using BusinceLayer.Interfaces;
 using BusinceLayer.Services;
 using DataAccessLayer.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace RebuildProject.Controllers
 {
@@ -18,6 +20,7 @@ namespace RebuildProject.Controllers
             _userService = userService;
         }
         // GET: api/User
+        [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -44,19 +47,32 @@ namespace RebuildProject.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
+            
             var createdUser = await _userService.AddAsync(createUserDto);
             return CreatedAtAction(nameof(GetById), new { id = createdUser.UserId }, createdUser);
         }
 
         // PUT: api/User/5
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateUserDto updateUserDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+           
+            int editorId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            string editorRole = User.FindFirst(ClaimTypes.Role).Value;
+
+         
+            if (editorRole == "User" && editorId != id)
+                return Forbid(); 
+
+            
+
+          
             var result = await _userService.UpdateAsync(id, updateUserDto);
+
             if (!result)
                 return NotFound($"User with ID {id} not found.");
 
@@ -65,14 +81,29 @@ namespace RebuildProject.Controllers
 
         // DELETE: api/User/5
         [HttpDelete("{id}")]
+        [Authorize] 
         public async Task<IActionResult> Delete(int id)
         {
+            int editorId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            string editorRole = User.FindFirst(ClaimTypes.Role).Value;
+
+           
+            if (editorRole == "User" && editorId != id)
+                return Forbid();
+
+           
+            if (editorRole == "Admin")
+                return Forbid();
+
+           
             var deleted = await _userService.DeleteAsync(id);
+
             if (!deleted)
                 return NotFound($"User with ID {id} not found.");
 
             return NoContent();
         }
+
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
@@ -85,6 +116,36 @@ namespace RebuildProject.Controllers
                 return Unauthorized("Invalid email or password");
 
             return Ok(loginResponse);
+        }
+        [HttpPatch("update-role")]
+        [Authorize]
+        public async Task<IActionResult> UpdateRole(UpdateRoleDto dto)
+        {
+            //take id from token
+            int editorId = int.Parse(
+                User.FindFirst(ClaimTypes.NameIdentifier).Value
+            );
+
+            var result = await _userService.UpdateUserRoleAsync(editorId, dto);
+
+            if (!result)
+                return Forbid();
+
+            return Ok("Role updated successfully");
+        }
+
+        [Authorize(Roles = "Admin,SuperAdmin")]
+        [HttpPatch("ban")]
+        public async Task<IActionResult> BanUser(BanUserDto dto)
+        {
+            int editorId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            var result = await _userService.BanUserAsync(editorId, dto);
+
+            if (!result)
+                return Forbid(); 
+
+            return Ok("User banned successfully");
         }
 
     }
