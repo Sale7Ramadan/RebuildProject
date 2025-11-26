@@ -29,15 +29,15 @@ namespace DataAccessLayer.Repositries
         }
 
        
-        public async Task<IEnumerable<Report>> GetMostLikedReportsAsync(int count)
-        {
-            return await _dbSet
-                .Include(r => r.User)
-                .Include(r => r.City)
-                .OrderByDescending(r => r.LikesCount)
-                .Take(count)
-                .ToListAsync();
-        }
+        //public async Task<IEnumerable<Report>> GetMostLikedReportsAsync(int count)
+        //{
+        //    return await _dbSet
+        //        .Include(r => r.User)
+        //        .Include(r => r.City)
+        //        .OrderByDescending(r => r.LikesCount)
+        //        .Take(count)
+        //        .ToListAsync();
+        //}
 
         public async Task<IEnumerable<Report>> GetReportsByCityAsync(int cityId)
         {

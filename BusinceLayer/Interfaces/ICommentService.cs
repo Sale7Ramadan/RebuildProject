@@ -1,4 +1,5 @@
-﻿using BusinceLayer.Services;
+﻿using BusinceLayer.EntitiesDTOS;
+using BusinceLayer.Services;
 using DataAccessLayer.Entities;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BusinceLayer.Interfaces
 {
-    public interface ICommentService 
+    public interface ICommentService : IBaseService<Comment, CommentDto, CreateCommentDto,UpdateCommentDto>
     {
         Task<CommentDto> AddCommentAsync(CreateCommentDto dto, int userId);
        

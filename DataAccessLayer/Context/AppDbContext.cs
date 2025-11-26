@@ -44,6 +44,7 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<SupportMessage> SupportMessages { get; set; }
 
     public virtual DbSet<SupportTicket> SupportTicket { get; set; }
+    public DbSet<ReportsLikes> ReportLikes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -304,6 +305,31 @@ public partial class AppDbContext : DbContext
             .WithOne(m => m.Ticket)
             .HasForeignKey(m => m.TicketId)
             .OnDelete(DeleteBehavior.Cascade);
+
+
+
+        modelBuilder.Entity<ReportsLikes>()
+        .HasKey(rl => rl.ReportLikeId); // المفتاح الأساسي
+
+        modelBuilder.Entity<ReportsLikes>()
+            .HasOne(rl => rl.User)
+            .WithMany(u => u.LikedReports)
+            .HasForeignKey(rl => rl.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<ReportsLikes>()
+            .HasOne(rl => rl.Report)
+            .WithMany(r => r.Likes)
+            .HasForeignKey(rl => rl.ReportId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+       
+        modelBuilder.Entity<ReportsLikes>()
+            .HasIndex(rl => new { rl.UserId, rl.ReportId })
+            .IsUnique();
+
+
+
 
         OnModelCreatingPartial(modelBuilder);
     }

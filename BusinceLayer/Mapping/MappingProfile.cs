@@ -94,7 +94,7 @@ namespace BusinceLayer.Mapping
     .ForMember(dest => dest.HasDonationCase, opt => opt.MapFrom(src => src.DonationCases.Any()));
 
             CreateMap<CreateReportDto, Report>()
-      .ForMember(dest => dest.LikesCount, opt => opt.Ignore()) 
+     
       .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now)) 
       .ForMember(dest => dest.ReportImages, opt => opt.Ignore())  
       .ForMember(dest => dest.Comments, opt => opt.Ignore())  
@@ -105,7 +105,7 @@ namespace BusinceLayer.Mapping
 
 
             CreateMap<UpdateReportDto, Report>()
-    .ForMember(dest => dest.LikesCount, opt => opt.Ignore()) 
+    
     .ForMember(dest => dest.CreatedAt, opt => opt.Ignore()) 
     .ForMember(dest => dest.ReportImages, opt => opt.Ignore())  
     .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null)); 
@@ -149,6 +149,15 @@ namespace BusinceLayer.Mapping
 
             CreateMap<UpdateSupportMessageDto, SupportMessage>();
 
+
+
+            CreateMap<ReportsLikes, ReportsLikeDto>()
+           .ForMember(dest => dest.UserName,
+               opt => opt.MapFrom(src => src.User.FirstName + " " + src.User.LastName));
+
+           
+            CreateMap<CreateReportsLikeDto, ReportsLikes>()
+                .ForMember(dest => dest.UserId, opt => opt.Ignore());
 
         }
         }

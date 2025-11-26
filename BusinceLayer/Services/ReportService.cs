@@ -58,11 +58,11 @@ namespace BusinceLayer.Services
         }
 
        
-        public async Task<IEnumerable<ReportDto>> GetMostLikedReportsAsync(int count)
-        {
-            var reports = await _reportRepository.GetMostLikedReportsAsync(count);
-            return _mapper.Map<IEnumerable<ReportDto>>(reports);
-        }
+        //public async Task<IEnumerable<ReportDto>> GetMostLikedReportsAsync(int count)
+        //{
+        //    var reports = await _reportRepository.GetMostLikedReportsAsync(count);
+        //    return _mapper.Map<IEnumerable<ReportDto>>(reports);
+        //}
 
         
         public async Task<IEnumerable<ReportDto>> GetReportsByCityAsync(int cityId)

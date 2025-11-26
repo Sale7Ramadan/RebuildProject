@@ -13,7 +13,7 @@ namespace DataAccessLayer.Interfaces
         Task<bool> IncrementLikesAsync(int reportId);
 
        
-        Task<IEnumerable<Report>> GetMostLikedReportsAsync(int count);
+       // Task<IEnumerable<Report>> GetMostLikedReportsAsync(int count);
         Task<IEnumerable<Report>> GetReportsByCityAsync(int cityId);
     }
 }

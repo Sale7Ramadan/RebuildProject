@@ -14,10 +14,12 @@ namespace BusinceLayer.Services
     public class TicketService : BaseService<SupportTicket, SupportTicketDto, CreateSupportTicketDto, UpdateSupportTicketDto>, ITicketService
     {
         private readonly IBaseRepositories<SupportTicket> _repository;
+        private readonly IMapper _mapper;
 
         public TicketService(IBaseRepositories<SupportTicket> repository, IMapper mapper) : base(repository, mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<SupportTicketDto>> GetTicketsForUserAsync(int userId, string role)

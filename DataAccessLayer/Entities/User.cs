@@ -32,6 +32,9 @@ public partial class User
     public virtual ICollection<Donation> Donations { get; set; } = new List<Donation>();
     public ICollection<SupportMessage> SupportMessages { get; set; } = new List<SupportMessage>();
     public virtual ICollection<Report> Reports { get; set; } = new List<Report>();
+    //public ICollection<ReportsLikes>? Likes { get; set; }
+    public ICollection<ReportsLikes> LikedReports { get; set; } = new List<ReportsLikes>();
+
     public ICollection<SupportTicket> SupportTickets { get; set; } = new List<SupportTicket>();
 
 }

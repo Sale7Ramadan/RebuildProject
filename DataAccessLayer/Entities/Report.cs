@@ -23,7 +23,7 @@ public partial class Report
     public double? Latitude { get; set; }   
     public double? Longitude { get; set; } 
     public DateTime? CreatedAt { get; set; }
-    public int LikesCount { get; set; }
+    //public int LikesCount { get; set; }
     public virtual Category Category { get; set; } = null!;
 
     public virtual City City { get; set; } = null!;
@@ -33,6 +33,9 @@ public partial class Report
     public virtual ICollection<DonationCase> DonationCases { get; set; } = new List<DonationCase>();
 
     public virtual ICollection<ReportImage> ReportImages { get; set; } = new List<ReportImage>();
+    // public ICollection<ReportsLikes>? Likes { get; set; }
+    public ICollection<ReportsLikes> Likes { get; set; } = new List<ReportsLikes>();
+
 
     public virtual User User { get; set; } = null!;
 }

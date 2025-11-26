@@ -14,11 +14,13 @@ namespace BusinceLayer.Services
     public class MessageService : BaseService<SupportMessage, SupportMessageDto, CreateSupportMessageDto, UpdateSupportMessageDto>, IMessageService
     {
         private readonly IBaseRepositories<SupportMessage> _repository;
+        private readonly IMapper _mapper;
 
         public MessageService(IBaseRepositories<SupportMessage> repository, IMapper mapper)
             : base(repository, mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
       
