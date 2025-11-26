@@ -58,18 +58,21 @@ namespace BusinceLayer.Services
 
     if (user == null)
         return null;
+    if(user.IsBanned)
+        return null;
 
-    var result = _passwordHasher.VerifyHashedPassword(user, user.PassHash, loginDto.Password);
+            var result = _passwordHasher.VerifyHashedPassword(user, user.PassHash, loginDto.Password);
 
     if (result == PasswordVerificationResult.Failed)
         return null;
 
     // توليد JWT
     var token = _jwtService.GenerateToken(user);
-
+      
     // إنشاء الـResponse DTO
     var response = new LoginResponseDto
     {
+        
         User = _mapper.Map<UserDto>(user),
         Token = token
     };

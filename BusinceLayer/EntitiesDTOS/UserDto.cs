@@ -16,6 +16,7 @@ namespace BusinceLayer.EntitiesDTOS
         public string Email { get; set; }
         public string? PhoneNumber { get; set; }
         public string Role { get; set; } = "User";
+        public bool IsBanned { get; set; } = false;
         public DateTime? CreatedAt { get; set; }
         public int? CityId { get; set; }
         public string? CityName { get; set; }

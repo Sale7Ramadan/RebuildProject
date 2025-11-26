@@ -104,6 +104,7 @@ namespace RebuildProject.Controllers
             return NoContent();
         }
 
+
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
@@ -117,6 +118,7 @@ namespace RebuildProject.Controllers
 
             return Ok(loginResponse);
         }
+
         [HttpPatch("update-role")]
         [Authorize]
         public async Task<IActionResult> UpdateRole(UpdateRoleDto dto)
