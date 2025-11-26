@@ -14,10 +14,10 @@ namespace BusinceLayer.Services
         public string CommentText { get; set; }
         public DateTime? CreatedAt { get; set; }
 
-        // نعرض اسم المستخدم بدلاً من الـ ID الخاص به
+        public int UserId { get; set; }
         public string UserName { get; set; }
 
-        // نعرض معرّف البلاغ للسياق
+       
         public int ReportId { get; set; }
     }
     public class CreateCommentDto
@@ -25,6 +25,7 @@ namespace BusinceLayer.Services
         //[Required(ErrorMessage = "نص التعليق مطلوب.")]
         //[StringLength(1000, ErrorMessage = "التعليق طويل جداً، الحد الأقصى 1000 حرف.")]
         public string CommentText { get; set; }
+      
 
         //[Required(ErrorMessage = "يجب تحديد البلاغ المرتبط بالتعليق.")]
         public int ReportId { get; set; }
@@ -35,6 +36,8 @@ namespace BusinceLayer.Services
         //[Required(ErrorMessage = "نص التعليق مطلوب.")]
         //[StringLength(1000, ErrorMessage = "التعليق طويل جداً، الحد الأقصى 1000 حرف.")]
         public string CommentText { get; set; }
+     
+
     }
 
 

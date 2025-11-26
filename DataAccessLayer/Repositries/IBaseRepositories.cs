@@ -20,6 +20,7 @@ namespace DataAccessLayer.Repositories
         Task<bool> DeleteAsync(int id);
 
         Task<IEnumerable<T>> GetAllWithIncludeAsync(params Expression<Func<T, object>>[] includes);
+       // Task<T> GetByIdWithIncludeAsync(int id, params Expression<Func<T, object>>[] includes);
 
 
     }

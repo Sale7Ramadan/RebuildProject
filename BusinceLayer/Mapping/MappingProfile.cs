@@ -33,15 +33,25 @@ namespace BusinceLayer.Mapping
             CreateMap<UpdateCityDto, City>()
             .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
+     
             CreateMap<Comment, CommentDto>()
+                .ForMember(dest => dest.UserName,
+                    opt => opt.MapFrom(src => src.User != null
+                        ? src.User.FirstName + " " + src.User.LastName
+                        : "Unknown User"))
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
+                .ForMember(dest => dest.ReportId, opt => opt.MapFrom(src => src.ReportId))
+                .ForMember(dest => dest.CommentText, opt => opt.MapFrom(src => src.CommentText))
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt));
 
-          .ForMember(dest => dest.UserName, opt =>
-          opt.MapFrom(src => src.User.FirstName.ToString()
-          + " " + src.User.LastName.ToString()));
+       
+            CreateMap<CreateCommentDto, Comment>()
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow)); // تضيف وقت الإنشاء تلقائي
 
-            CreateMap<CreateCommentDto, Comment>();
+      
             CreateMap<UpdateCommentDto, Comment>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
 
 
 

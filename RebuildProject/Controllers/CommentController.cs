@@ -1,7 +1,9 @@
-﻿using BusinceLayer.Services;
-using BusinceLayer.Interfaces;
+﻿using BusinceLayer.Interfaces;
+using BusinceLayer.Services;
 using DataAccessLayer.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace RebuildProject.Controllers
 {
@@ -10,17 +12,21 @@ namespace RebuildProject.Controllers
     public class CommentController : ControllerBase
     {
         private readonly IBaseService<Comment, CommentDto, CreateCommentDto, UpdateCommentDto> _commentService;
+        private readonly ICommentService commentService1;
 
-        public CommentController(IBaseService<Comment, CommentDto, CreateCommentDto, UpdateCommentDto> commentService)
+        public CommentController(IBaseService<Comment, CommentDto, CreateCommentDto, UpdateCommentDto> commentService
+            , ICommentService commentService1)
         {
             _commentService = commentService;
+            this.commentService1 = commentService1;
+
         }
 
         // GET: api/Comment
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var comments = await _commentService.GetAllAsync();
+            var comments = await _commentService.GetAllWithIncludeAsync(u => u.User);
             return Ok(comments);
         }
 
@@ -28,7 +34,8 @@ namespace RebuildProject.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var comment = await _commentService.GetByIdAsync(id);
+            var comment = await _commentService.GetAllWithIncludeAsync(u => u.User);
+            var commentResult = comment.FirstOrDefault(c => c.CommentId == id);
             if (comment == null)
                 return NotFound($"Comment with ID {id} not found.");
 
@@ -36,15 +43,25 @@ namespace RebuildProject.Controllers
         }
 
         // POST: api/Comment
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateCommentDto createCommentDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var createdComment = await _commentService.AddAsync(createCommentDto);
-            return CreatedAtAction(nameof(GetById), new { id = createdComment.CommentId }, createdComment);
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            var result = await commentService1.AddCommentAsync(createCommentDto, userId);
+
+            if (result == null)
+                return NotFound("Report not found.");
+
+            return Ok(result);
         }
+
+
+
 
         // PUT: api/Comment/5
         [HttpPut("{id}")]
@@ -52,7 +69,7 @@ namespace RebuildProject.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
+          
             var result = await _commentService.UpdateAsync(id, updateCommentDto);
             if (!result)
                 return NotFound($"Comment with ID {id} not found.");
@@ -62,9 +79,24 @@ namespace RebuildProject.Controllers
 
         // DELETE: api/Comment/5
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
+            int editorId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            string role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            // جلب التعليق
+            var comment = await _commentService.GetByIdAsync(id);
+            if (comment == null)
+                return NotFound($"Comment with ID {id} not found.");
+
+            // تحقق إذا صاحب التعليق أو Admin/SuperAdmin
+            if (comment.UserId != editorId && role != "Admin" && role != "SuperAdmin")
+                return Forbid();
+
+            // الحذف
             var deleted = await _commentService.DeleteAsync(id);
+
             if (!deleted)
                 return NotFound($"Comment with ID {id} not found.");
 
