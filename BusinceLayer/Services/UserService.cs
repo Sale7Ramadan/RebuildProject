@@ -3,11 +3,13 @@ using BusinceLayer.EntitiesDTOS;
 using BusinceLayer.Interfaces;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Repositories;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,6 +19,7 @@ namespace BusinceLayer.Services
     {
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly IJwtService _jwtService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         public UserService(IBaseRepositories<User> repository, IMapper mapper, IJwtService jwtService)
             : base(repository, mapper)
         {
@@ -27,8 +30,22 @@ namespace BusinceLayer.Services
         public override async Task<UserDto> AddAsync(CreateUserDto createDto)
         {
             if (string.IsNullOrWhiteSpace(createDto.Password))
-            {
                 throw new ArgumentException("Password is required");
+
+            // افتراضي: كل المستخدمين الجدد يكونون User
+            var roleToAssign = "User";
+
+            // إذا من داخل Context لديك معلومات عن المستخدم الحالي (Admin/SuperAdmin)
+            // مثال: User.Identity أو Claims
+            // شرط: إذا المستخدم الحالي Admin أو SuperAdmin فقط يسمح بتعيين الدور
+            if (_httpContextAccessor.HttpContext != null)
+            {
+                var currentUserRole = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Role);
+                if (currentUserRole == "Admin" || currentUserRole == "SuperAdmin")
+                {
+                    if (!string.IsNullOrWhiteSpace(createDto.Role))
+                        roleToAssign = createDto.Role; // المسؤول يمكنه تغيير الدور
+                }
             }
 
             var user = new User
@@ -36,11 +53,10 @@ namespace BusinceLayer.Services
                 FirstName = createDto.FirstName,
                 LastName = createDto.LastName,
                 Email = createDto.Email,
-                Role = createDto.Role,
+                Role = roleToAssign, // مهم ✅
                 PhoneNumber = createDto.PhoneNumber,
                 CreatedAt = DateTime.Now,
-                 CityId = createDto.CityId,
-                //CityName = createDto.CityName
+                CityId = createDto.CityId
             };
 
             user.PassHash = _passwordHasher.HashPassword(user, createDto.Password);
@@ -49,7 +65,8 @@ namespace BusinceLayer.Services
 
             return _mapper.Map<UserDto>(savedUser);
         }
-      
+
+
 
         public async Task<LoginResponseDto?> LoginAsync(LoginDto loginDto)
 {
