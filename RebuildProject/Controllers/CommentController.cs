@@ -36,10 +36,10 @@ namespace RebuildProject.Controllers
         {
             var comment = await _commentService.GetAllWithIncludeAsync(u => u.User);
             var commentResult = comment.FirstOrDefault(c => c.CommentId == id);
-            if (comment == null)
+            if (commentResult == null)
                 return NotFound($"Comment with ID {id} not found.");
 
-            return Ok(comment);
+            return Ok(commentResult);
         }
 
         // POST: api/Comment

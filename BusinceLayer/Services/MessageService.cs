@@ -30,11 +30,12 @@ namespace BusinceLayer.Services
 
             if (role == "Admin")
             {
-                messages = await _repository.GetAllAsync();
+                messages = await _repository.GetAllWithIncludeAsync(m=>m.Ticket);
             }
             else
             {
-                messages = await _repository.GetAllWithIncludeAsync(m => m.Ticket.UserId == userId);
+                var all = await _repository.GetAllWithIncludeAsync(m => m.Ticket);
+                messages = all.Where(m => m.Ticket.UserId == userId);
             }
 
             return _mapper.Map<IEnumerable<SupportMessageDto>>(messages);
@@ -47,11 +48,14 @@ namespace BusinceLayer.Services
 
             if (role == "Admin")
             {
-                messages = await _repository.GetAllWithIncludeAsync(m => m.TicketId == ticketId);
+                messages = await _repository.GetAllWithIncludeAsync(m => m.Ticket);
+                messages = messages.Where(m => m.TicketId == ticketId);
             }
             else
             {
-                messages = await _repository.GetAllWithIncludeAsync(m => m.TicketId == ticketId && m.Ticket.UserId == userId);
+
+                var all = await _repository.GetAllWithIncludeAsync(m => m.TicketId == ticketId && m.Ticket.UserId == userId);
+                messages = all.Where(m => m.TicketId == ticketId && m.Ticket.UserId == userId);
             }
 
             return _mapper.Map<IEnumerable<SupportMessageDto>>(messages);
