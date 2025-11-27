@@ -51,9 +51,14 @@ namespace RebuildProject.Controllers
         [Authorize]
         public async Task<IActionResult> Create([FromBody] CreateSupportMessageDto dto)
         {
-            var message = await _messageService.AddAsync(dto);
+            var senderId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+            bool isAdmin = role == "Admin";
+
+            var message = await _messageService.AddMessageAsync(dto, senderId, isAdmin);
             return Ok(message);
         }
+
 
         [HttpPut("{id}")]
         [Authorize]

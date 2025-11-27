@@ -142,7 +142,11 @@ namespace BusinceLayer.Mapping
 
             CreateMap<UpdateSupportTicketDto, SupportTicket>();
 
-            CreateMap<SupportMessage, SupportMessageDto>().ReverseMap();
+            CreateMap<SupportMessage, SupportMessageDto>()
+                .ForMember(dest => dest.SenderId, opt => opt.MapFrom(src => src.UserId));
+
+            CreateMap<SupportMessageDto, SupportMessage>()
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.SenderId));
 
             CreateMap<CreateSupportMessageDto, SupportMessage>()
                 .ForMember(dest => dest.UserId, opt => opt.Ignore());

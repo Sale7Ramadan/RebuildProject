@@ -39,6 +39,23 @@ namespace BusinceLayer.Services
 
             return _mapper.Map<IEnumerable<SupportTicketDto>>(tickets);
         }
+        public async Task<SupportTicketDto> AddTicketAsync(CreateSupportTicketDto dto, int userId)
+        {
+          
+            var ticket = _mapper.Map<SupportTicket>(dto);
+
+            
+            ticket.UserId = userId;
+            ticket.CreatedAt = DateTime.UtcNow;
+
+         
+            await _repository.AddAsync(ticket);
+
+        
+            return _mapper.Map<SupportTicketDto>(ticket);
+        }
+
+
 
     }
 }

@@ -18,9 +18,9 @@ namespace BusinceLayer.EntitiesDTOS
     public class CreateSupportMessageDto
     {
         public int TicketId { get; set; }
-        public int SenderId { get; set; }
+
         public string Message { get; set; }
-        public bool IsFromAdmin { get; set; }
+      
     }
 
     public class UpdateSupportMessageDto

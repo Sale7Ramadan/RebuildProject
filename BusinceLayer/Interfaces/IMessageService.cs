@@ -16,5 +16,8 @@ namespace BusinceLayer.Interfaces
 
       
         Task<IEnumerable<SupportMessageDto>> GetMessagesByTicketIdAsync(int ticketId, int userId, string role);
+
+        Task<SupportMessageDto> AddMessageAsync(CreateSupportMessageDto dto, int senderId, bool isAdmin);
+
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Sockets;
+using System.Security.Claims;
 
 namespace RebuildProject.Controllers
 {
@@ -58,7 +59,15 @@ namespace RebuildProject.Controllers
 
         public async Task<IActionResult> Create([FromBody] CreateSupportTicketDto dto)
         {
-            var ticket = await _ticketService.AddAsync(dto);
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+
+
+         
+
+           
+            var ticket = await _supportTicket.AddTicketAsync(dto,userId);
+
             return Ok(ticket);
         }
 
@@ -68,15 +77,16 @@ namespace RebuildProject.Controllers
 
         public async Task<IActionResult> Update(int id, [FromBody] UpdateSupportTicketDto dto)
         {
-            var updated = await _ticketService.UpdateAsync(id, dto);
-            var userId = int.Parse(User.FindFirst("UserId")?.Value);
-            var role = User.FindFirst("Role")?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
 
-            if (role != "Admin" && dto.UserId != userId)
-                return Forbid();
+            if (role != "Admin" && role !="SuperAdmin")
+                return Forbid("Only admins can update tickets.");
+
+            var updated = await _ticketService.UpdateAsync(id, dto);
             if (!updated) return NotFound();
             return NoContent();
         }
+
 
 
         [HttpDelete("{id}")]
@@ -84,9 +94,22 @@ namespace RebuildProject.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out int userId))
+                return Unauthorized("Invalid user ID in token.");
+
+            var ticket = await _ticketService.GetByIdAsync(id);
+            if (ticket == null) return NotFound();
+
+            if ((role != "Admin" &&role != "SuperAdmin")&& ticket.UserId != userId )
+                return Forbid();
+
             var deleted = await _ticketService.DeleteAsync(id);
             if (!deleted) return NotFound();
+
             return NoContent();
         }
+
     }
 }
