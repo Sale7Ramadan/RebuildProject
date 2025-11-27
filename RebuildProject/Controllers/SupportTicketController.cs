@@ -27,12 +27,19 @@ namespace RebuildProject.Controllers
         [Authorize]
         public async Task<IActionResult> GetTicketsForCurrentUser()
         {
-            var userId = int.Parse(User.FindFirst("UserId")?.Value);
-            var role = User.FindFirst("Role")?.Value;
+            var userIdClaim = User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier");
+            var roleClaim = User.FindFirst("http://schemas.microsoft.com/ws/2008/06/identity/claims/role");
+
+            if (userIdClaim == null)
+                return Unauthorized("UserId claim not found in token");
+
+            var userId = int.Parse(userIdClaim.Value);
+            var role = roleClaim?.Value;
 
             var tickets = await _supportTicket.GetTicketsForUserAsync(userId, role);
             return Ok(tickets);
         }
+
 
 
         [HttpGet("{id}")]

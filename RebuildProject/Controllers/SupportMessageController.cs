@@ -4,6 +4,7 @@ using DataAccessLayer.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace RebuildProject.Controllers
 {
@@ -22,8 +23,11 @@ namespace RebuildProject.Controllers
         [Authorize]
         public async Task<IActionResult> GetMessagesForCurrentUser()
         {
-            var userId = int.Parse(User.FindFirst("UserId")?.Value);
-            var role = User.FindFirst("Role")?.Value;
+            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var role = User.FindFirstValue(ClaimTypes.Role);
+
+            if (!int.TryParse(userIdClaim, out int userId))
+                return Unauthorized("Invalid or missing user ID in token.");
 
             var messages = await _messageService.GetMessagesForUserAsync(userId, role);
             return Ok(messages);
@@ -33,14 +37,16 @@ namespace RebuildProject.Controllers
         [Authorize]
         public async Task<IActionResult> GetMessagesByTicket(int ticketId)
         {
-            var userId = int.Parse(User.FindFirst("UserId")?.Value);
-            var role = User.FindFirst("Role")?.Value;
+            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var role = User.FindFirstValue(ClaimTypes.Role);
+
+            if (!int.TryParse(userIdClaim, out int userId))
+                return Unauthorized("Invalid or missing user ID in token.");
 
             var messages = await _messageService.GetMessagesByTicketIdAsync(ticketId, userId, role);
             return Ok(messages);
         }
 
-      
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> Create([FromBody] CreateSupportMessageDto dto)

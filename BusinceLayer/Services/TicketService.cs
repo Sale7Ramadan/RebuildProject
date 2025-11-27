@@ -26,12 +26,19 @@ namespace BusinceLayer.Services
         {
             IEnumerable<SupportTicket> tickets;
 
+            // اجلب التذاكر + Include
+            var allTickets = await _repository.GetAllWithIncludeAsync(
+                t => t.User,
+                t => t.Messages
+            );
+
             if (role == "Admin")
-                tickets = await _repository.GetAllAsync();
+                tickets = allTickets;
             else
-                tickets = await _repository.GetAllWithIncludeAsync(t => t.UserId == userId);
+                tickets = allTickets.Where(t => t.UserId == userId).ToList();
 
             return _mapper.Map<IEnumerable<SupportTicketDto>>(tickets);
         }
+
     }
 }
