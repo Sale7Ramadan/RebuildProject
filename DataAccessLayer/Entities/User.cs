@@ -17,7 +17,7 @@ public partial class User
 
     public string? PhoneNumber { get; set; }
 
-    public string Role { get; set; } = null!;
+    public string Role { get; set; } = "User";
     
     public DateTime? CreatedAt { get; set; }
     public int? CityId { get; set; }
