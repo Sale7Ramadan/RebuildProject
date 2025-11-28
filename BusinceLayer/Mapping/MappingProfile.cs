@@ -91,7 +91,8 @@ namespace BusinceLayer.Mapping
     .ForMember(dest => dest.CommentCount, opt => opt.MapFrom(src => src.Comments.Count))
     .ForMember(dest => dest.ReportImages, opt => opt.MapFrom(src => src.ReportImages))
     .ForMember(dest => dest.TotalCollectedAmount, opt => opt.MapFrom(src => src.DonationCases.Sum(dc => dc.CollectedAmount ?? 0)))
-    .ForMember(dest => dest.HasDonationCase, opt => opt.MapFrom(src => src.DonationCases.Any()));
+    .ForMember(dest => dest.HasDonationCase, opt => opt.MapFrom(src => src.DonationCases.Any()))
+    .ForMember(dest => dest.LikesCount, opt => opt.MapFrom(src => src.Likes.Count));
 
             CreateMap<CreateReportDto, Report>()
      

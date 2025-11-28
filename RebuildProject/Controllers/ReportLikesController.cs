@@ -26,7 +26,13 @@ namespace RebuildProject.Controllers
         [HttpPost("{reportId}/like")]
         public async Task<IActionResult> AddLike(int reportId)
         {
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var claim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (claim == null)
+                return Unauthorized("UserId claim not found in token.");
+
+            if (!int.TryParse(claim.Value, out int userId))
+                return Unauthorized("Invalid UserId claim in token.");
+
             var result = await _service.AddLikeAsync(userId, reportId);
 
             if (!result)
@@ -35,11 +41,16 @@ namespace RebuildProject.Controllers
             return Ok("Like added successfully.");
         }
 
-        // DELETE: api/ReportLikes/{reportId}/like
         [HttpDelete("{reportId}/like")]
         public async Task<IActionResult> RemoveLike(int reportId)
         {
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var claim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (claim == null)
+                return Unauthorized("UserId claim not found in token.");
+
+            if (!int.TryParse(claim.Value, out int userId))
+                return Unauthorized("Invalid UserId claim in token.");
+
             var result = await _service.RemoveLikeAsync(userId, reportId);
 
             if (!result)
