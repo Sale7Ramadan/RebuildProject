@@ -16,6 +16,7 @@ namespace DataAccessLayer
 
             services.AddScoped(typeof(IBaseRepositories<>), typeof(BaseRepository<>));
             services.AddScoped<IReportRepository, ReportRepository>();
+            services.AddScoped<IReportLikesRepository, ReportLikesRepository>();
             return services;
         }
     }
