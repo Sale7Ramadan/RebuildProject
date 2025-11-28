@@ -31,7 +31,9 @@ namespace RebuildProject.Controllers
             var allReports = await _reportService.GetAllWithIncludeAsync(
                 x => x.City,
                 x => x.User,
-                x => x.Category
+                x => x.Category,
+                x => x.Likes,
+                x => x.Comments
             );
 
             return Ok(allReports);
@@ -49,9 +51,11 @@ namespace RebuildProject.Controllers
             }
 
             var allReports = await _reportService.GetAllWithIncludeAsync(
-                x => x.City,
+               x => x.City,
                 x => x.User,
-                x => x.Category
+                x => x.Category,
+                x => x.Likes,
+                x => x.Comments
             );
 
             var myReports = allReports.Where(r => r.UserId == userId);
