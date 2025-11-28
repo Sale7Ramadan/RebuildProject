@@ -13,5 +13,6 @@ namespace BusinceLayer.Interfaces
         Task<LoginResponseDto?> LoginAsync(LoginDto loginDto);
         Task<bool> UpdateUserRoleAsync(int editorId, UpdateRoleDto dto);
         Task<bool> BanUserAsync(int editorId, BanUserDto dto);
+        Task<bool> ChangePasswordAsync(int userId, string currentPassword, string newPassword);
     }
 }

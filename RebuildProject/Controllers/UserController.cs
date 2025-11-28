@@ -149,6 +149,22 @@ namespace RebuildProject.Controllers
 
             return Ok("User banned successfully");
         }
+        [Authorize]
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
+        {
+            var claim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (claim == null)
+                return Unauthorized("UserId claim not found in token.");
 
+            if (!int.TryParse(claim.Value, out int userId))
+                return Unauthorized("Invalid UserId claim in token.");
+
+            var success = await _userService.ChangePasswordAsync(userId, dto.CurrentPassword, dto.NewPassword);
+            if (!success)
+                return BadRequest("Current password is incorrect.");
+
+            return Ok("Password changed successfully.");
+        }
     }
 }

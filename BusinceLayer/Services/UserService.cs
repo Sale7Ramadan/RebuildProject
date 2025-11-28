@@ -150,7 +150,23 @@ namespace BusinceLayer.Services
 
             return true;
         }
+        public async Task<bool> ChangePasswordAsync(int userId, string currentPassword, string newPassword)
+        {
+            var user = await _repository.GetByIdAsync(userId);
+            if (user == null)
+                throw new KeyNotFoundException("User not found.");
 
+           
+            var result = _passwordHasher.VerifyHashedPassword(user, user.PassHash, currentPassword);
+            if (result == PasswordVerificationResult.Failed)
+                return false;
+
+           
+            user.PassHash = _passwordHasher.HashPassword(user, newPassword);
+
+            await _repository.UpdateAsync(user);
+            return true;
+        }
 
 
 
