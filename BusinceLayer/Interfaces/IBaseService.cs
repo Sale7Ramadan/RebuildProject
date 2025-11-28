@@ -1,4 +1,5 @@
 ﻿using BusinceLayer.EntitiesDTOS;
+using BusinceLayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,6 @@ namespace BusinceLayer.Interfaces
         Task<bool> DeleteAsync(int id);
 
         Task<IEnumerable<TDto>> GetAllWithIncludeAsync(params Expression<Func<TEntity, object>>[] includes);
-
+       
     }
 }

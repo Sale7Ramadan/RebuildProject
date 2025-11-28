@@ -30,17 +30,18 @@ namespace RebuildProject.Controllers
             return Ok(comments);
         }
 
-        // GET: api/Comment/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+       
+        [HttpGet("report/{reportId}")]
+        public async Task<IActionResult> GetCommentsByReport(int reportId)
         {
-            var comment = await _commentService.GetAllWithIncludeAsync(u => u.User);
-            var commentResult = comment.FirstOrDefault(c => c.CommentId == id);
-            if (commentResult == null)
-                return NotFound($"Comment with ID {id} not found.");
+            var comments = await commentService1.GetCommentsByReportAsync(reportId);
 
-            return Ok(commentResult);
+            if (comments == null || !comments.Any())
+                return NotFound($"No comments found for report {reportId}");
+
+            return Ok(comments);
         }
+
 
         // POST: api/Comment
         [Authorize]

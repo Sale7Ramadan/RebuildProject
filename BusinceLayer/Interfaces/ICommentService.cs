@@ -12,6 +12,8 @@ namespace BusinceLayer.Interfaces
     public interface ICommentService : IBaseService<Comment, CommentDto, CreateCommentDto,UpdateCommentDto>
     {
         Task<CommentDto> AddCommentAsync(CreateCommentDto dto, int userId);
-       
+
+        Task<IEnumerable<CommentDto>> GetCommentsByReportAsync(int reportId);
+
     }
 }

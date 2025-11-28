@@ -20,11 +20,12 @@ namespace BusinceLayer.Services
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly IJwtService _jwtService;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public UserService(IBaseRepositories<User> repository, IMapper mapper, IJwtService jwtService)
+        public UserService(IBaseRepositories<User> repository, IMapper mapper, IJwtService jwtService,IHttpContextAccessor httpContextAccessor)
             : base(repository, mapper)
         {
             _passwordHasher = new PasswordHasher<User>();
             _jwtService = jwtService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public override async Task<UserDto> AddAsync(CreateUserDto createDto)

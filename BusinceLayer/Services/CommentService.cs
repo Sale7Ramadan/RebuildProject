@@ -3,6 +3,7 @@ using BusinceLayer.EntitiesDTOS;
 using BusinceLayer.Interfaces;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,12 +51,7 @@ namespace BusinceLayer.Services
         }
 
        
-        public async Task<IEnumerable<CommentDto>> GetCommentsByReportAsync(int reportId)
-        {
-            var comments = await _repository.GetAllWithIncludeAsync(c => c.ReportId == reportId);
-
-            return _mapper.Map<IEnumerable<CommentDto>>(comments);
-        }
+       
 
        
         public async Task<IEnumerable<CommentDto>> GetUserCommentsAsync(int userId)
@@ -64,7 +60,16 @@ namespace BusinceLayer.Services
 
             return _mapper.Map<IEnumerable<CommentDto>>(comments);
         }
+        public async Task<IEnumerable<CommentDto>> GetCommentsByReportAsync(int reportId)
+        {
+            var comments = await _repository
+                .GetAllWithIncludeAsync(c => c.User, c => c.Report);
 
-        
+            var filtered = comments.Where(c => c.ReportId == reportId);
+
+            return _mapper.Map<IEnumerable<CommentDto>>(filtered);
+        }
+
+
     }
 }
