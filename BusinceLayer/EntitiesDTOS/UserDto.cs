@@ -61,7 +61,7 @@ namespace BusinceLayer.EntitiesDTOS
 
         //[Required(ErrorMessage = "البريد الإلكتروني مطلوب.")]
         //[EmailAddress(ErrorMessage = "صيغة البريد الإلكتروني غير صحيحة.")]
-        public string Email { get; set; }
+       // public string Email { get; set; }
         public int? CityId { get; set; }
         //[StringLength(20)]
         public string? PhoneNumber { get; set; }

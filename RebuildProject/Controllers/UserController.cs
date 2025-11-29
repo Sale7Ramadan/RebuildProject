@@ -81,21 +81,29 @@ namespace RebuildProject.Controllers
 
         // DELETE: api/User/5
         [HttpDelete("{id}")]
-        [Authorize] 
+        [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
             int editorId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             string editorRole = User.FindFirst(ClaimTypes.Role).Value;
 
            
-            if (editorRole == "User" && editorId != id)
-                return Forbid();
+            if (editorRole == "User")
+            {
+                if (editorId != id)
+                    return Forbid(); 
 
-           
+                
+            }
+
+          
             if (editorRole == "Admin")
                 return Forbid();
 
-           
+          
+            if (editorRole == "SuperAdmin")
+                return Forbid();
+
             var deleted = await _userService.DeleteAsync(id);
 
             if (!deleted)
