@@ -62,6 +62,9 @@ namespace BusinceLayer.EntitiesDTOS
         //[Required(ErrorMessage = "يجب اختيار المدينة.")]
         public int CityId { get; set; }
     }
-
+    public class UpdateStatusDto
+    {
+        public string Status { get; set; }
+    }
 
 }

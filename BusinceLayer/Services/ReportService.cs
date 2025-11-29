@@ -70,5 +70,21 @@ namespace BusinceLayer.Services
             var reports = await _reportRepository.GetReportsByCityAsync(cityId);
             return _mapper.Map<IEnumerable<ReportDto>>(reports);
         }
+        public async Task<bool> UpdateReportStatusAsync(int reportId, string newStatus, int updatedByUserId, string updatedByRole)
+        {
+            var report = await _reportRepository.GetByIdAsync(reportId);
+
+            if (report == null)
+                return false;
+
+            report.Status = newStatus;
+            report.UpdatedByUserId = updatedByUserId;
+            report.UpdatedByRole = updatedByRole; // حفظ الرول
+            report.StatusUpdatedAt = DateTime.UtcNow;
+
+            await _reportRepository.UpdateAsync(report);
+
+            return true;
+        }
     }
 }

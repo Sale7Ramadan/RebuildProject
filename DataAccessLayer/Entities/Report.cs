@@ -24,6 +24,9 @@ public partial class Report
     public double? Longitude { get; set; } 
     public DateTime? CreatedAt { get; set; }
     //public int LikesCount { get; set; }
+    public int? UpdatedByUserId { get; set; } // مين عدّل الستاتس
+    public DateTime? StatusUpdatedAt { get; set; }
+    public string? UpdatedByRole { get; set; }
     public virtual Category Category { get; set; } = null!;
 
     public virtual City City { get; set; } = null!;
@@ -36,6 +39,6 @@ public partial class Report
     // public ICollection<ReportsLikes>? Likes { get; set; }
     public ICollection<ReportsLikes> Likes { get; set; } = new List<ReportsLikes>();
 
-
+    public virtual User? UpdatedByUser { get; set; }
     public virtual User User { get; set; } = null!;
 }

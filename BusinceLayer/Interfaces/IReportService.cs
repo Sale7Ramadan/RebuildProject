@@ -14,5 +14,6 @@ namespace BusinceLayer.Interfaces
         Task<bool> IncrementLikesAsync(int reportId);
        // Task<IEnumerable<ReportDto>> GetMostLikedReportsAsync(int count);
         Task<IEnumerable<ReportDto>> GetReportsByCityAsync(int cityId);
+        Task<bool> UpdateReportStatusAsync(int reportId, string newStatus, int updatedByUserId, string updatedByRole);
     }
 }

@@ -171,6 +171,10 @@ public partial class AppDbContext : DbContext
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Reports_Users");
+            entity.HasOne(r => r.UpdatedByUser)
+       .WithMany()
+       .HasForeignKey(r => r.UpdatedByUserId)
+       .OnDelete(DeleteBehavior.NoAction);
         });
 
         modelBuilder.Entity<ReportImage>(entity =>

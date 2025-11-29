@@ -148,5 +148,37 @@ namespace RebuildProject.Controllers
             var reports = await reportService1.GetReportsByCityAsync(cityId);
             return Ok(reports);
         }
+        [HttpPatch("{id}/status")]
+        [Authorize(Roles = "Admin,SuperAdmin")] // بس Admin و SuperAdmin يقدروا يعدلوا
+        public async Task<IActionResult> UpdateReportStatus(int id, [FromBody] UpdateStatusDto dto)
+        {
+           
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            string editorRole = User.FindFirst(ClaimTypes.Role).Value;
+            // التحقق من وجود الـ User ID
+            if (string.IsNullOrEmpty(userIdClaim))
+                return Unauthorized("User not authenticated");
+
+            // تحويل الـ User ID من string لـ int
+            if (!int.TryParse(userIdClaim, out int userId))
+                return Unauthorized("Invalid user ID");
+
+            // استدعاء الـ Service لتعديل الـ Status
+            var result = await reportService1.UpdateReportStatusAsync(id, dto.Status, userId,editorRole);
+
+            // التحقق من نجاح العملية
+            if (!result)
+                return NotFound(new { message = "Report not found" });
+
+            // إرجاع استجابة نجاح
+            return Ok(new
+            {
+                message = "Status updated successfully",
+                reportId = id,
+                newStatus = dto.Status,
+                updatedBy = userId,
+                updatedAt = DateTime.UtcNow
+            });
+        }
     }
 }
