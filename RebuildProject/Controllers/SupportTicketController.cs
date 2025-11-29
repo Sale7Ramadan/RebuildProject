@@ -24,6 +24,17 @@ namespace RebuildProject.Controllers
             _supportTicket = ticketService1;
         }
 
+        [HttpPost]
+        [Authorize]
+
+        public async Task<IActionResult> Create([FromBody] CreateSupportTicketDto dto)
+        {
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+            var ticket = await _supportTicket.AddTicketAsync(dto, userId);
+
+            return Ok(ticket);
+        }
         [HttpGet("my-tickets")]
         [Authorize]
         public async Task<IActionResult> GetTicketsForCurrentUser()
@@ -54,17 +65,7 @@ namespace RebuildProject.Controllers
         }
 
 
-        [HttpPost]
-        [Authorize]
-
-        public async Task<IActionResult> Create([FromBody] CreateSupportTicketDto dto)
-        {
-            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
-            var ticket = await _supportTicket.AddTicketAsync(dto,userId);
-
-            return Ok(ticket);
-        }
+        
 
 
         [HttpPut("{id}")]
