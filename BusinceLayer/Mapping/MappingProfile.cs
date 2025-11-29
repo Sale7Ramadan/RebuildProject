@@ -147,6 +147,7 @@ namespace BusinceLayer.Mapping
 
             CreateMap<CreateSupportTicketDto, SupportTicket>()
                 .ForMember(dest => dest.UserId, opt => opt.Ignore());
+              
 
             CreateMap<UpdateSupportTicketDto, SupportTicket>();
 

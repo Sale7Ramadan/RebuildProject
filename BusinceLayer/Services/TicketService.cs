@@ -33,7 +33,9 @@ namespace BusinceLayer.Services
                 t => t.City
             );
 
-            if (role == "Admin" || role == "SuperAdmin")
+            if (role == "Admin")
+                tickets = allTickets;
+            else if (role == "SuperAdmin")
                 tickets = allTickets;
             else
                 tickets = allTickets.Where(t => t.UserId == userId).ToList();
@@ -42,17 +44,24 @@ namespace BusinceLayer.Services
         }
         public async Task<SupportTicketDto> AddTicketAsync(CreateSupportTicketDto dto, int userId)
         {
-          
+
+            var user = await _repository.GetByIdAsync(userId);
+            if (user == null)
+                throw new Exception("User not found.");
+
+            var city = await _repository.GetByIdAsync(dto.CityId);
+            if (city == null)
+                throw new Exception("City not found.");
+
             var ticket = _mapper.Map<SupportTicket>(dto);
 
-            
             ticket.UserId = userId;
             ticket.CreatedAt = DateTime.UtcNow;
 
-         
+            ticket.Title = $"{user.User.FirstName} {user.User.LastName} - {city.City.CityName}";
+
             await _repository.AddAsync(ticket);
 
-        
             return _mapper.Map<SupportTicketDto>(ticket);
         }
 
