@@ -29,7 +29,8 @@ namespace BusinceLayer.Services
             // اجلب التذاكر + Include
             var allTickets = await _repository.GetAllWithIncludeAsync(
                 t => t.User,
-                t => t.Messages
+                t => t.Messages,
+                t => t.City
             );
 
             if (role == "Admin")
