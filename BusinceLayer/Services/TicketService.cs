@@ -33,7 +33,7 @@ namespace BusinceLayer.Services
                 t => t.City
             );
 
-            if (role == "Admin")
+            if (role == "Admin" || role == "SuperAdmin")
                 tickets = allTickets;
             else
                 tickets = allTickets.Where(t => t.UserId == userId).ToList();
