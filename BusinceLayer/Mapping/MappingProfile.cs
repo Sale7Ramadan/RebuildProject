@@ -141,8 +141,8 @@ namespace BusinceLayer.Mapping
       .ForMember(dest => dest.CityName,
           opt => opt.MapFrom(src => src.City.CityName))
       .ForMember(dest => dest.PhoneNumber,
-          opt => opt.MapFrom(src => src.User.PhoneNumber))
-      .ReverseMap();
+          opt => opt.MapFrom(src => src.User.PhoneNumber));
+      
 
 
             CreateMap<CreateSupportTicketDto, SupportTicket>()
