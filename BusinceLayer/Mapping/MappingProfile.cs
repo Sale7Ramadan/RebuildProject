@@ -135,14 +135,29 @@ namespace BusinceLayer.Mapping
                 .ForMember(dest => dest.PassHash, opt => opt.Ignore())
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null)); ;
 
+            //      CreateMap<SupportTicket, SupportTicketDto>()
+            //.ForMember(dest => dest.UserName,
+            //    opt => opt.MapFrom(src => src.User.FirstName + " " + src.User.LastName))
+            //.ForMember(dest => dest.CityName,
+            //    opt => opt.MapFrom(src => src.City.CityName))
+            //.ForMember(dest => dest.PhoneNumber,
+            //    opt => opt.MapFrom(src => src.User.PhoneNumber));
             CreateMap<SupportTicket, SupportTicketDto>()
-      .ForMember(dest => dest.UserName,
-          opt => opt.MapFrom(src => src.User.FirstName + " " + src.User.LastName))
-      .ForMember(dest => dest.CityName,
-          opt => opt.MapFrom(src => src.City.CityName))
-      .ForMember(dest => dest.PhoneNumber,
-          opt => opt.MapFrom(src => src.User.PhoneNumber));
-      
+          .ForMember(dest => dest.UserName,
+              opt => opt.MapFrom(src =>
+                  src.User != null
+                      ? src.User.FirstName + " " + src.User.LastName
+                      : "غير معروف"))
+          .ForMember(dest => dest.CityName,
+              opt => opt.MapFrom(src =>
+                  src.City != null
+                      ? src.City.CityName
+                      : "غير محددة"))
+          .ForMember(dest => dest.PhoneNumber,
+              opt => opt.MapFrom(src =>
+                  src.User != null
+                      ? src.User.PhoneNumber
+                      : "-"));
 
 
             CreateMap<CreateSupportTicketDto, SupportTicket>()
