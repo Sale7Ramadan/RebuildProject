@@ -15,11 +15,15 @@ namespace BusinceLayer.Services
     {
         private readonly IBaseRepositories<SupportTicket> _repository;
         private readonly IMapper _mapper;
+        private readonly IBaseRepositories<User> _userRepository;
+        private readonly IBaseRepositories<City> _cityRepository;
 
-        public TicketService(IBaseRepositories<SupportTicket> repository, IMapper mapper) : base(repository, mapper)
+        public TicketService(IBaseRepositories<SupportTicket> repository, IMapper mapper,IBaseRepositories<User> user,IBaseRepositories<City> city) : base(repository, mapper)
         {
             _repository = repository;
             _mapper = mapper;
+            _userRepository = user;
+            _cityRepository = city;
         }
 
         public async Task<IEnumerable<SupportTicketDto>> GetTicketsForUserAsync(int userId, string role)
@@ -44,27 +48,29 @@ namespace BusinceLayer.Services
         }
         public async Task<SupportTicketDto> AddTicketAsync(CreateSupportTicketDto dto, int userId)
         {
-
-            var user = await _repository.GetByIdAsync(userId);
+            // اجلب المستخدم
+            var user = await _userRepository.GetByIdAsync(userId);
             if (user == null)
                 throw new Exception("User not found.");
 
-            var city = await _repository.GetByIdAsync(dto.CityId);
+            // اجلب المدينة
+            var city = await _cityRepository.GetByIdAsync(dto.CityId);
             if (city == null)
                 throw new Exception("City not found.");
 
+            // انشاء التذكرة
             var ticket = _mapper.Map<SupportTicket>(dto);
-
             ticket.UserId = userId;
             ticket.CreatedAt = DateTime.UtcNow;
 
-            ticket.Title = $"{user.User.FirstName} {user.User.LastName} - {city.City.CityName}";
+            // تعديل العنوان تلقائياً
+            ticket.Title = $"{user.FirstName} {user.LastName} - {city.CityName}";
 
+            // حفظ
             await _repository.AddAsync(ticket);
 
             return _mapper.Map<SupportTicketDto>(ticket);
         }
-
 
 
     }
