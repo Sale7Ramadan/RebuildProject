@@ -61,11 +61,6 @@ namespace RebuildProject.Controllers
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-
-
-         
-
-           
             var ticket = await _supportTicket.AddTicketAsync(dto,userId);
 
             return Ok(ticket);

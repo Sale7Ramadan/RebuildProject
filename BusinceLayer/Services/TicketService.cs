@@ -48,38 +48,26 @@ namespace BusinceLayer.Services
         }
         public async Task<SupportTicketDto> AddTicketAsync(CreateSupportTicketDto dto, int userId)
         {
-            // اجلب المستخدم
             var user = await _userRepository.GetByIdAsync(userId);
             if (user == null)
                 throw new Exception("User not found.");
 
-            // اجلب المدينة
             var city = await _cityRepository.GetByIdAsync(dto.CityId);
             if (city == null)
                 throw new Exception("City not found.");
 
-            // انشاء التذكرة
             var ticket = _mapper.Map<SupportTicket>(dto);
             ticket.UserId = userId;
             ticket.CreatedAt = DateTime.UtcNow;
-
-            // تعديل العنوان تلقائياً
             ticket.Title = $"{user.FirstName} {user.LastName} - {city.CityName}";
 
-            // حفظ
             await _repository.AddAsync(ticket);
 
-            // 🟢 اجلب التذكرة من جديد مع Include
-            var fullTicket = (await _repository.GetAllWithIncludeAsync(
-                t => t.User,
-                t => t.City
-            )).FirstOrDefault(t => t.Id == ticket.Id);
+            // 🟢 ربط البيانات يدوياً
+            ticket.User = user;
+            ticket.City = city;
 
-            if (fullTicket == null)
-                throw new Exception("Ticket not found after creation.");
-
-            // رجاع DTO كامل
-            return _mapper.Map<SupportTicketDto>(fullTicket);
+            return _mapper.Map<SupportTicketDto>(ticket);
         }
 
 
