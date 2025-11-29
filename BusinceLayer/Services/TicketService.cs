@@ -69,7 +69,17 @@ namespace BusinceLayer.Services
             // حفظ
             await _repository.AddAsync(ticket);
 
-            return _mapper.Map<SupportTicketDto>(ticket);
+            // 🟢 اجلب التذكرة من جديد مع Include
+            var fullTicket = (await _repository.GetAllWithIncludeAsync(
+                t => t.User,
+                t => t.City
+            )).FirstOrDefault(t => t.Id == ticket.Id);
+
+            if (fullTicket == null)
+                throw new Exception("Ticket not found after creation.");
+
+            // رجاع DTO كامل
+            return _mapper.Map<SupportTicketDto>(fullTicket);
         }
 
 
