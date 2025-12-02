@@ -6,16 +6,9 @@ using System.Threading.Tasks;
 
 namespace BusinceLayer.EntitiesDTOS
 {
-    public class LoginResponseDto
+    public class JwtTokenResult
     {
-        public UserDto User { get; set; }
-
         public string Token { get; set; }
-
-        public string RefreshToken { get; set; }
-
         public DateTime ExpiresOn { get; set; }
     }
-
-
 }

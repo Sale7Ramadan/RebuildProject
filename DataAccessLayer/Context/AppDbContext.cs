@@ -42,6 +42,7 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<VwOpenDonationCase> VwOpenDonationCases { get; set; }
 
     public virtual DbSet<SupportMessage> SupportMessages { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
     public virtual DbSet<SupportTicket> SupportTicket { get; set; }
     public DbSet<ReportsLikes> ReportLikes { get; set; }
@@ -332,7 +333,11 @@ public partial class AppDbContext : DbContext
             .HasIndex(rl => new { rl.UserId, rl.ReportId })
             .IsUnique();
 
-
+        modelBuilder.Entity<RefreshToken>()
+     .HasOne(rt => rt.User)
+     .WithMany(u => u.RefreshTokens)
+     .HasForeignKey(rt => rt.UserId)
+     .OnDelete(DeleteBehavior.Cascade);
 
 
         OnModelCreatingPartial(modelBuilder);

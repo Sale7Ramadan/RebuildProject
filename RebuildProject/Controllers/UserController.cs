@@ -41,17 +41,7 @@ namespace RebuildProject.Controllers
             return Ok(user);
         }
 
-        // POST: api/User
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateUserDto createUserDto)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            
-            var createdUser = await _userService.AddAsync(createUserDto);
-            return CreatedAtAction(nameof(GetById), new { id = createdUser.UserId }, createdUser);
-        }
-
+       
         // PUT: api/User/5
         [Authorize]
         [HttpPut("{id}")]
@@ -113,19 +103,7 @@ namespace RebuildProject.Controllers
         }
 
 
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var loginResponse = await _userService.LoginAsync(loginDto);
-
-            if (loginResponse == null)
-                return Unauthorized("Invalid email or password");
-
-            return Ok(loginResponse);
-        }
+      
 
         [HttpPatch("update-role")]
         [Authorize]

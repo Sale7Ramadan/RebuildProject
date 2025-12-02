@@ -20,6 +20,7 @@ namespace BusinceLayer
             services.AddScoped<ITicketService, TicketService>();
             services.AddScoped<ICommentService,CommentService>();
             services.AddScoped<IReportLikesService, ReportLikesService>();
+            services.AddScoped<IAuthService, AuthService>();
             return services;
         }
     }

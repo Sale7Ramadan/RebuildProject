@@ -1,4 +1,5 @@
-﻿using DataAccessLayer.Entities;
+﻿using BusinceLayer.EntitiesDTOS;
+using DataAccessLayer.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace BusinceLayer.Interfaces
 {
     public interface IJwtService
     {
-        string GenerateToken(User user);
+        JwtTokenResult GenerateToken(User user);
+       // Task<TokenResponseModel> RefreshTokenAsync(string refreshToken)
     }
 }

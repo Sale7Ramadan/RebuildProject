@@ -69,34 +69,34 @@ namespace BusinceLayer.Services
 
 
 
-        public async Task<LoginResponseDto?> LoginAsync(LoginDto loginDto)
-{
-    var user = (await _repository.GetAllAsync())
-                .FirstOrDefault(u => u.Email == loginDto.Email);
+//        public async Task<LoginResponseDto?> LoginAsync(LoginDto loginDto)
+//{
+//    var user = (await _repository.GetAllAsync())
+//                .FirstOrDefault(u => u.Email == loginDto.Email);
 
-    if (user == null)
-        return null;
-    if(user.IsBanned)
-        return null;
+//    if (user == null)
+//        return null;
+//    if(user.IsBanned)
+//        return null;
 
-            var result = _passwordHasher.VerifyHashedPassword(user, user.PassHash, loginDto.Password);
+//            var result = _passwordHasher.VerifyHashedPassword(user, user.PassHash, loginDto.Password);
 
-    if (result == PasswordVerificationResult.Failed)
-        return null;
+//    if (result == PasswordVerificationResult.Failed)
+//        return null;
 
-    // توليد JWT
-    var token = _jwtService.GenerateToken(user);
+//    // توليد JWT
+//    var token = _jwtService.GenerateToken(user);
       
-    // إنشاء الـResponse DTO
-    var response = new LoginResponseDto
-    {
+//    // إنشاء الـResponse DTO
+//    var response = new LoginResponseDto
+//    {
         
-        User = _mapper.Map<UserDto>(user),
-        Token = token
-    };
+//        User = _mapper.Map<UserDto>(user),
+//        Token = token
+//    };
 
-    return response;
-}
+//    return response;
+//}
 
         public async Task<bool> UpdateUserRoleAsync(int editorId, UpdateRoleDto dto)
         {

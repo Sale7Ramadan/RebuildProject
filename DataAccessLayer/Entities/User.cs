@@ -34,6 +34,7 @@ public partial class User
     public virtual ICollection<Report> Reports { get; set; } = new List<Report>();
     //public ICollection<ReportsLikes>? Likes { get; set; }
     public ICollection<ReportsLikes> LikedReports { get; set; } = new List<ReportsLikes>();
+    public ICollection<RefreshToken> RefreshTokens { get; set; }
 
     public ICollection<SupportTicket> SupportTickets { get; set; } = new List<SupportTicket>();
 
