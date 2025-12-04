@@ -85,7 +85,7 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.Report).WithMany(p => p.Comments)
                 .HasForeignKey(d => d.ReportId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_Comments_Reports");
 
             entity.HasOne(d => d.User).WithMany(p => p.Comments)

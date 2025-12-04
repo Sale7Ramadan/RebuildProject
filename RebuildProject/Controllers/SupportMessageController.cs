@@ -53,7 +53,8 @@ namespace RebuildProject.Controllers
         {
             var senderId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
             var role = User.FindFirst(ClaimTypes.Role)?.Value;
-            bool isAdmin = role == "Admin";
+            bool isAdmin = role == "Admin" || role == "SuperAdmin";
+
 
             var message = await _messageService.AddMessageAsync(dto, senderId, isAdmin);
             return Ok(message);
