@@ -30,7 +30,8 @@ namespace BusinceLayer.Services
             var like = new ReportsLikes
             {
                 UserId = userId,
-                ReportId = reportId
+                ReportId = reportId,
+                
             };
 
             await _repo.AddAsync(like);

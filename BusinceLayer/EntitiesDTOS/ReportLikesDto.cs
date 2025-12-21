@@ -12,9 +12,9 @@ namespace BusinceLayer.EntitiesDTOS
     }
     public class ReportsLikeDto
     {
-        public int LikeId { get; set; }
+        public int ReportLikeId { get; set; }
         public int UserId { get; set; }
-        public string UserName { get; set; }   // مهم جداً
+        public string UserName { get; set; }  
         public int ReportId { get; set; }
     }
     public class UpdateReportLikesDto
